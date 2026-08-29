@@ -1,0 +1,101 @@
+:root { --navy:#05070d; --blue:#00cfff; --blue-dark:#008fc2; --gold:#f5b83d; --ink:#edf7ff; --muted:#9db0c2; --line:#23354b; --surface:#0d1422; --bg:#070b13; font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif; }
+* { box-sizing:border-box; }
+body { min-height:100vh; margin:0; color:var(--ink); background:radial-gradient(circle at 85% -10%,rgba(0,207,255,.18) 0,transparent 32rem),radial-gradient(circle at 10% 35%,rgba(245,184,61,.08) 0,transparent 28rem),var(--bg); }
+.site-nav { display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:.7rem max(1rem,calc((100% - 1180px)/2)); background:var(--navy); }
+.nav-brand { display:flex; align-items:center; gap:.55rem; color:#fff; font-size:1.15rem; font-weight:900; text-decoration:none; }.nav-brand img { width:38px; height:38px; object-fit:cover; border-radius:50%; }.nav-brand span { color:var(--gold); }
+.nav-links { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:.35rem; }.nav-links a { padding:.5rem .7rem; color:#dbe3ff; font-size:.85rem; text-decoration:none; border-radius:.45rem; }.nav-links a:hover,.nav-links .nav-login { color:#fff; background:var(--blue); }.nav-links .nav-admin { color:var(--gold); }
+.page-hero { position:relative; isolation:isolate; min-height:280px; padding:4rem 1rem 4.5rem; color:#fff; background:linear-gradient(125deg,#05070d,#102c43 65%,#075c78); }.page-hero > *,.page-main { width:min(1180px,calc(100% - 2rem)); margin-left:auto; margin-right:auto; }.page-hero > * { position:relative; z-index:1; padding-left:170px; text-align:left; }.page-hero h1 { margin:.4rem 0 .7rem; font-size:clamp(2rem,5vw,3.5rem); line-height:1.05; }.page-hero .eyebrow { margin:0 0 .8rem; }.page-hero > p:not(.eyebrow) { max-width:560px; margin:0; color:#dbe3ff; font-size:1.05rem; }
+.page-hero::before { position:absolute; z-index:1; top:50%; left:max(1rem,calc((100% - 1180px)/2)); width:140px; height:140px; content:""; background:url("logo.jpg") center/cover; border:3px solid var(--gold); border-radius:50%; box-shadow:0 0 32px rgba(0,207,255,.4); transform:translateY(-50%); }
+.page-hero::after { position:absolute; top:calc(50% + 82px); left:max(1rem,calc((100% - 1180px)/2)); width:140px; color:var(--gold); content:"FORGE INTELLIGENCE. BUILD THE FUTURE."; font-size:.46rem; font-weight:800; letter-spacing:.08em; line-height:1.3; text-align:center; text-shadow:0 0 8px rgba(245,184,61,.45); transform:translateY(-50%); }
+.page-hero .brand { position:relative; z-index:1; width:min(1180px,calc(100% - 2rem)); min-height:140px; padding-left:170px; margin-left:auto; margin-right:auto; }
+.page-hero > p:not(.eyebrow),.page-hero > h1 { width:min(1180px,calc(100% - 2rem)); padding-left:170px; margin-left:auto; margin-right:auto; }
+.page-main { margin-top:-1.5rem; margin-bottom:4rem; }.page-card { padding:1.5rem; margin-bottom:1rem; border:1px solid var(--line); border-radius:1rem; background:var(--surface); box-shadow:0 12px 32px rgba(0,0,0,.28); }.page-card h2 { margin-top:0; }.page-card label { display:block; margin:.8rem 0 .3rem; font-weight:700; }.page-card input,.page-card textarea { width:100%; padding:.75rem; color:var(--ink); border:1px solid var(--line); border-radius:.5rem; background:#080e19; }.primary { display:inline-block; padding:.75rem 1rem; margin-top:1rem; color:#061019; font-weight:800; text-decoration:none; border:0; border-radius:.5rem; background:var(--blue); cursor:pointer; }.primary:hover { background:var(--gold); }.muted { color:var(--muted); }
+.level-links { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:.75rem; }.level-links a { padding:1rem; color:var(--blue); font-weight:700; text-decoration:none; border:1px solid #1d5871; border-radius:.65rem; background:#0a1b29; }
+.product-list { display:grid; gap:1rem; }
+.product-level { padding:1.25rem; border:1px solid var(--line); border-radius:.85rem; background:#080e19; }
+.product-level.locked { opacity:.72; }
+.product-header { display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-bottom:1rem; }
+.product-header h3 { margin:0; color:var(--blue); }
+.status { padding:.3rem .65rem; color:#061019; font-size:.75rem; font-weight:800; border-radius:999px; background:var(--gold); }
+.status.locked { color:var(--muted); background:#23354b; }
+.product-grid { display:grid; grid-template-columns:1fr 1fr 1.4fr; gap:.75rem; }
+.product-slot { display:flex; min-height:110px; align-items:center; justify-content:center; padding:1rem; color:var(--muted); text-align:center; border:1px dashed #315068; border-radius:.6rem; }
+.product-description { align-items:flex-start; justify-content:flex-start; text-align:left; }
+.product-link { display:inline-block; margin-top:.75rem; color:var(--blue); font-weight:800; text-decoration:none; }
+@media(max-width:700px){.product-grid{grid-template-columns:1fr}.product-header{align-items:flex-start;flex-direction:column}}
+@media(max-width:700px){.site-nav{align-items:flex-start;flex-direction:column}.nav-links{justify-content:flex-start}.page-hero{padding:3rem 1rem}.page-hero > *{padding-left:105px}.page-hero::before{left:1rem;width:85px;height:85px}.page-hero::after{top:calc(50% + 57px);left:1rem;width:85px;font-size:.32rem}}
+
+/* One identical two-column hero for Home and every inner page. */
+.page-hero {
+  display:grid;
+  grid-template-columns:140px minmax(0,1fr);
+  column-gap:30px;
+  align-items:center;
+  min-height:280px;
+}
+.page-hero::before {
+  position:static;
+  grid-column:1;
+  grid-row:1 / span 3;
+  width:140px;
+  height:140px;
+  transform:none;
+}
+.page-hero > * {
+  grid-column:2;
+  width:auto;
+  max-width:none;
+  padding-left:0;
+  margin-left:0;
+  margin-right:0;
+}
+.page-hero .brand {
+  grid-column:2;
+  grid-row:1 / span 3;
+  width:auto;
+  min-height:140px;
+  padding-left:0;
+  margin:0;
+}
+.page-hero .brand > * {
+  max-width:680px;
+  padding-left:0;
+}
+.page-hero::after {
+  position:absolute;
+  top:calc(50% + 82px);
+  left:max(1rem,calc((100% - 1180px)/2));
+}
+@media(max-width:700px) {
+  .page-hero {
+    grid-template-columns:85px minmax(0,1fr);
+    column-gap:20px;
+    min-height:220px;
+  }
+  .page-hero::before {
+    width:85px;
+    height:85px;
+  }
+  .page-hero > *,.page-hero .brand {
+    grid-column:2;
+  }
+  .page-hero .brand {
+    min-height:85px;
+  }
+  .page-hero::after {
+    top:calc(50% + 57px);
+    left:1rem;
+    width:85px;
+  }
+}
+
+/* Override legacy Home rules so inner-page titles start at the same text edge. */
+.page-hero > p:not(.eyebrow),
+.page-hero > h1 {
+  width:auto;
+  max-width:680px;
+  padding-left:0;
+  margin-left:0;
+  margin-right:0;
+  text-align:left;
+}
