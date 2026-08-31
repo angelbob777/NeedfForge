@@ -19,6 +19,7 @@
       <a href="admin-support.html">Support</a>
       <a href="admin-settings.html">Settings</a>
       <a href="admin-access.html">Access</a>
+      <a href="index.html">Logout</a>
     </div>
   </nav>
   <header class="page-hero"><p class="eyebrow">Administration</p><h1>Payments and withdrawals</h1><p>Manage payment records, entry fees and payout requests.</p></header>
@@ -26,10 +27,13 @@
     <section class="page-card">
       <h2>Payment review</h2>
       <form>
-        <label>Transaction ID<input type="text" placeholder="NF-0001"></label>
+        <label>Transaction type<select><option>Fiat</option><option>Crypto</option></select></label>
+        <label>Transaction ID<input type="text" placeholder="NF-0001 or blockchain reference"></label>
         <label>Member<input type="text" placeholder="Member username or email"></label>
         <label>Payment status<select><option>Paid</option><option>Pending</option><option>Rejected</option></select></label>
-        <label>Amount<input type="text" placeholder="R0.00"></label>
+        <label>Amount<input type="text" placeholder="R0.00 or crypto amount"></label>
+        <label>Fiat account details<textarea rows="3" placeholder="Bank account, account holder, reference, or payment details"></textarea></label>
+        <label>Crypto transaction ID<input type="text" placeholder="Wallet address, transaction hash, or blockchain reference"></label>
         <label>Admin note<textarea rows="4" placeholder="Add approval or rejection comments"></textarea></label>
         <button class="primary" type="button">Save payment update</button>
       </form>
