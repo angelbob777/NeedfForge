@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Genealogy | NeedForge</title>
   <link rel="stylesheet" href="shared.css?v=18"><script src="auth.js"></script>
+  <script src="pricing-config.js"></script>
 </head>
 <body>
   <nav class="site-nav">
@@ -25,6 +26,16 @@
         <div><span class="muted">Current position</span><strong id="currentPositions">Loading active positions...</strong></div>
       </div>
     </section>
+    <section class="page-card genealogy-income">
+      <h2>Withdrawable income</h2>
+      <div class="level-links">
+        <div><span class="muted">All earnings</span><strong id="allEarningsValue">R 1,420</strong></div>
+        <div><span class="muted">Re-cycling fee</span><strong id="recyclingFeeValue">- R 0</strong></div>
+        <div><span class="muted">Upgrade</span><strong id="upgradeFeeValue">- R 0</strong></div>
+        <div><span class="muted">Withdrawable income</span><strong id="withdrawableIncomeValue">R 0</strong></div>
+      </div>
+      <p class="muted" style="margin:.75rem 0 0;">Formula: all earnings - re-cycling fee - upgrade = withdrawable income</p>
+    </section>
     <section class="page-card">
       <h2>Genealogy by level</h2>
       <p class="muted">Choose a level to view its cycles. Select a cycle to view the MLM style spot tree.</p>
@@ -33,6 +44,21 @@
     </section>
   </main>
   <script>
+    const allEarnings = 1420;
+    const levelPricing = NeedForgePricing.getLevelPricing();
+    const currentTier = levelPricing[0] || { fee: 0, upgrade: 0 };
+    const recyclingFee = Number(currentTier.fee) || 0;
+    const upgradeFee = Number(currentTier.upgrade) || 0;
+    const withdrawableIncome = Math.max(0, allEarnings - recyclingFee - upgradeFee);
+    const allEarningsValue = document.querySelector("#allEarningsValue");
+    const recyclingFeeValue = document.querySelector("#recyclingFeeValue");
+    const upgradeFeeValue = document.querySelector("#upgradeFeeValue");
+    const withdrawableIncomeValue = document.querySelector("#withdrawableIncomeValue");
+    if (allEarningsValue) allEarningsValue.textContent = NeedForgePricing.money(allEarnings);
+    if (recyclingFeeValue) recyclingFeeValue.textContent = `- ${NeedForgePricing.money(recyclingFee)}`;
+    if (upgradeFeeValue) upgradeFeeValue.textContent = `- ${NeedForgePricing.money(upgradeFee)}`;
+    if (withdrawableIncomeValue) withdrawableIncomeValue.textContent = NeedForgePricing.money(withdrawableIncome);
+
     const tree = document.querySelector("#genealogyTree");
     const levelTabs = document.querySelector("#levelTabs");
     const currentPositions = document.querySelector("#currentPositions");

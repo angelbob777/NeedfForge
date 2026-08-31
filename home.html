@@ -220,6 +220,18 @@
   </header>
   <main>
     <div class="notice" id="status"></div>
+    <section class="dashboard-summary" style="display:grid; grid-template-columns:repeat(2,minmax(220px,1fr)); gap:1rem; margin:0 0 1.5rem;">
+      <article class="page-card" style="padding:1.5rem; border:1px solid var(--line); border-radius:1rem; background:var(--surface); box-shadow:0 12px 32px rgba(0,0,0,.28);">
+        <p class="eyebrow" style="margin:0 0 .5rem; color:var(--gold); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase;">Earnings</p>
+        <h2 id="withdrawableEarnings" style="margin:0 0 .5rem; font-size:2rem;">R 1,420</h2>
+        <p style="margin:0; color:var(--muted);">Withdrawable earnings</p>
+      </article>
+      <article id="monthlyFeeCard" class="page-card" style="padding:1.5rem; border:1px solid var(--line); border-radius:1rem; background:var(--surface); box-shadow:0 12px 32px rgba(0,0,0,.28);">
+        <p class="eyebrow" style="margin:0 0 .5rem; color:var(--gold); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase;">Monthly fee</p>
+        <h2 id="monthlyFeeValue" style="margin:0 0 .5rem; font-size:2rem;">R 0</h2>
+        <p style="margin:0; color:var(--muted);">Monthly fee due on the active membership</p>
+      </article>
+    </section>
     <section id="siteContentBlocks" class="info-grid" style="display:grid; grid-template-columns:repeat(2,minmax(280px,1fr)); gap:1rem; margin:0 0 1.5rem;"></section>
 
     <section class="tree-section">
@@ -277,6 +289,25 @@
       const heroSubtitle = document.querySelector('.brand p:last-of-type');
       if (heroTitle) heroTitle.textContent = content.heroTitle;
       if (heroSubtitle) heroSubtitle.textContent = content.heroSubtitle;
+    }
+
+    const allEarnings = 1420;
+    const levelPricing = NeedForgePricing.getLevelPricing();
+    const activeLevelPricing = levelPricing[0] || { fee: 0, upgrade: 0 };
+    const monthlyFee = Number(activeLevelPricing.fee) || 0;
+    const upgradeFee = Number(activeLevelPricing.upgrade) || 0;
+    const withdrawableEarnings = Math.max(0, allEarnings - monthlyFee - upgradeFee);
+    const monthlyFeeCard = document.querySelector('#monthlyFeeCard');
+    const monthlyFeeValue = document.querySelector('#monthlyFeeValue');
+    const withdrawableEarningsEl = document.querySelector('#withdrawableEarnings');
+    if (withdrawableEarningsEl) withdrawableEarningsEl.textContent = NeedForgePricing.money(withdrawableEarnings);
+    if (monthlyFeeCard && monthlyFeeValue) {
+      if (withdrawableEarnings < monthlyFee) {
+        monthlyFeeValue.textContent = NeedForgePricing.money(monthlyFee);
+        monthlyFeeCard.hidden = false;
+      } else {
+        monthlyFeeCard.hidden = true;
+      }
     }
 
     const SUPABASE_URL = "https://YOUR_PROJECT.supabase.co";

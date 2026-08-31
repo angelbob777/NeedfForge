@@ -19,6 +19,9 @@
     .access-grid,.intro-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; }
     .access-card,.intro-card { padding:1.5rem; border:1px solid var(--line); border-radius:1rem; background:var(--surface); }
     .access-card h2,.intro-card h2 { margin-top:0; }
+    .overview-list { margin:0; padding-left:1.1rem; color:var(--ink); }
+    .overview-list li + li { margin-top:.55rem; }
+    .monthly-note { margin-top:1rem; padding:.8rem 1rem; border:1px solid #1d5871; border-radius:.7rem; background:#081722; color:var(--muted); }
     .access-card input { width:100%; margin:.35rem 0 .7rem; padding:.75rem; color:var(--ink); border:1px solid var(--line); border-radius:.5rem; background:#080e19; }
     .access-card button { width:100%; }
     .demo-note { padding:.75rem; margin-top:.8rem; color:var(--muted); border:1px solid #1d5871; border-radius:.5rem; }
@@ -81,11 +84,32 @@
         </div>
         <p id="accessMessage" class="muted" aria-live="polite"></p>
       </div>
-      <div class="access-card"><h2>Why NeedForge?</h2><p><strong>Company:</strong> NeedForge helps members organise their journey through a clear, structured ten-level platform.</p><p><strong>Affiliate program:</strong> Share NeedForge with your network, support new members and follow your progress through the genealogy dashboard.</p><p><strong>Products:</strong> Explore level products, bonus resources and free materials, with new content becoming available as levels open.</p><p class="join-callout">Join NeedForge today and start building your future.</p></div>
+      <div class="access-card">
+        <h2>How it works</h2>
+        <p>NeedForge is a structured membership platform designed around a 10-level model. Each level gives you a clear path to grow, earn and build your network through a monthly membership fee system.</p>
+        <p>Members enter through a chosen level, complete the monthly fee, unlock the next step and follow their progress from the dashboard. Every active cycle helps you track your products, positions and earnings in one place.</p>
+        <div class="monthly-note"><strong>Monthly fee:</strong> all fees are charged monthly. This keeps the membership model simple and predictable.</div>
+      </div>
     </section>
     <section class="intro-grid">
-      <article class="intro-card"><img src="logo.jpg" alt="NeedForge products"><h2>Products</h2><p>Browse level products, bonus resources and free materials. Open any level to view its video, image, description and link.</p><a class="primary" href="products.html">View products</a></article>
-      <article class="intro-card"><img src="logo.jpg" alt="NeedForge affiliate program"><h2>Affiliate program</h2><p>Share NeedForge with your network, help members understand the levels and track your activity through the genealogy dashboard.</p><a class="primary" href="affiliate.html">Learn how it works</a></article>
+      <article class="intro-card">
+        <img src="logo.jpg" alt="NeedForge products">
+        <h2>Products</h2>
+        <ul class="overview-list">
+          <li>Starter onboarding bundle</li>
+          <li>Member education and growth toolkit</li>
+          <li>Marketing and visibility support pack</li>
+          <li>Leadership and business training resources</li>
+          <li>Premium scaling tools and advanced product set</li>
+        </ul>
+        <a class="primary" href="products.html">View products</a>
+      </article>
+      <article class="intro-card">
+        <img src="logo.jpg" alt="NeedForge affiliate program">
+        <h2>Affiliate program</h2>
+        <p>Share NeedForge with your network, help members understand the levels and track your activity through the genealogy dashboard.</p>
+        <a class="primary" href="affiliate.html">Learn how it works</a>
+      </article>
     </section>
   </main>
   <script>

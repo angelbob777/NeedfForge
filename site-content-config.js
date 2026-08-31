@@ -8,18 +8,15 @@
     noticeBody: 'Add your Supabase URL and anon key in the configuration at the bottom of this file to enable shared registration and realtime updates.',
     howItWorksTitle: 'How it works',
     howItWorksText: 'NeedForge is built around a 10-level member journey. Each level has 10 cycles and each cycle contains 5 spots. Members enter through a chosen level, complete the relevant entry and upgrade requirements, and build a structured network across the platform. As each new level unlocks, members gain access to deeper products, stronger support, and continued growth through their genealogy tree. Every cycle is designed to create a clear path from first entry to long-term progression.',
-    productsTitle: 'Products by level',
+    productsTitle: 'Products',
     productList: [
-      'Level 1: Starter product bundle + onboarding access',
-      'Level 2: Growth toolkit + member education pack',
-      'Level 3: Sales and network building resources',
-      'Level 4: Brand and visibility tools',
-      'Level 5: Business systems and support training',
-      'Level 6: Leadership and team development assets',
-      'Level 7: Advanced strategy and operations training',
-      'Level 8: Premium scaling resources',
-      'Level 9: High-level business product set',
-      'Level 10: Executive and flagship product offering'
+      'Starter product bundle + onboarding access',
+      'Member education and growth toolkit',
+      'Sales and network-building resources',
+      'Brand visibility and marketing support',
+      'Leadership and business system training',
+      'Premium scaling and strategy resources',
+      'Executive product offering and advanced tools'
     ],
     bonusProducts: [
       'Bonus product collection: Additional value packs and special offers',
