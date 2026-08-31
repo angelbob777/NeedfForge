@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Products | NeedForge</title>
   <link rel="stylesheet" href="shared.css?v=18">
+  <script src="site-content-config.js"></script>
 </head>
 <body>
   <nav class="site-nav">
@@ -12,9 +13,9 @@
     <div class="nav-links"><a class="nav-admin" href="admin-login.html">Admin</a><a href="home.html">Home</a><a href="genealogy.html">Genealogy</a><a href="products.html">Products</a><a href="faq.html">FAQ</a><a href="contact.html">Contact Us</a><a href="payment.html">Payment</a><a class="nav-login" href="user-login.html">Login / Register</a></div>
   </nav>
   <header class="page-hero">
-    <p class="eyebrow">Member resources</p>
-    <h1>Products</h1>
-    <p>Browse level products, bonus products and free resources. Select an item to view its full details.</p>
+    <p id="productsEyebrow" class="eyebrow">Member resources</p>
+    <h1 id="productsTitle">Products</h1>
+    <p id="productsIntro">Browse level products, bonus products and free resources. Select an item to view its full details.</p>
   </header>
   <main class="page-main">
     <section class="page-card">
@@ -49,5 +50,16 @@
       </div>
     </section>
   </main>
+  <script>
+    function renderProductsPage() {
+      const content = NeedForgeSiteContent.getSiteContent();
+      const page = content.productsPage || NeedForgeSiteContent.DEFAULT_SITE_CONTENT.productsPage;
+      document.getElementById('productsEyebrow').textContent = page.eyebrow || 'Member resources';
+      document.getElementById('productsTitle').textContent = page.title || 'Products';
+      document.getElementById('productsIntro').textContent = page.intro || 'Browse level products, bonus products and free resources. Select an item to view its full details.';
+    }
+    renderProductsPage();
+    window.addEventListener('needforge-site-content-updated', renderProductsPage);
+  </script>
 </body>
 </html>

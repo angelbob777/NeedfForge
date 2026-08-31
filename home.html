@@ -43,6 +43,7 @@
     #authForm button { color:#061019; background:#00cfff; }
     #authForm button:hover { background:#f5b83d; }
   </style>
+  <script src="site-content-config.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
@@ -83,9 +84,10 @@
     .tree-section { margin-bottom: 1.5rem; }
     .spot-section h2, .tree-section h2 { margin-top: 0; font-size: 1.35rem; }
     .tree-section h2::after { display: block; width: 2.5rem; height: 3px; margin-top: .6rem; content: ""; background: var(--gold); }
-    .tree-level { display: grid; grid-template-columns: 7rem repeat(5, minmax(90px, 1fr)); gap: .6rem; align-items: stretch; margin-bottom: .6rem; }
-    .tree-label { display: flex; align-items: center; font-weight: 700; }
-    .tree-node { min-height: 3.5rem; padding: .65rem .5rem; color: var(--muted); font: inherit; font-size: .78rem; text-align: center; border: 1px dashed #c4cce0; border-radius: .65rem; background: #fafbff; cursor: pointer; }
+    .tree-level { display: grid; grid-template-columns: 5.5rem repeat(10, minmax(0, 1fr)); gap: .6rem; align-items: stretch; margin-bottom: .6rem; }
+    .tree-label { display: flex; flex-direction: row; align-items: center; justify-content: flex-start; font-weight: 700; line-height: 1; white-space: nowrap; }
+    .tree-label small { display: none; }
+    .tree-node { min-height: 3.5rem; width: 100%; aspect-ratio: 1; max-width: 3.5rem; padding: .25rem; color: var(--muted); font: inherit; font-size: .7rem; text-align: center; border: 1px dashed #c4cce0; border-radius: .65rem; background: #fafbff; cursor: pointer; display:flex; align-items:center; justify-content:center; }
     .tree-node.occupied { color: var(--blue-dark); border: 1px solid #aab8f8; background: #eef1ff; }
     .tree-node small { display: block; margin-top: .25rem; color: var(--muted); overflow: hidden; text-overflow: ellipsis; }
     .spot-grid { display: grid; grid-template-columns: repeat(10, minmax(55px, 1fr)); gap: .45rem; }
@@ -131,6 +133,9 @@
     .tree-level { grid-template-columns:5rem repeat(10,minmax(0,1fr)); min-width:0; width:100%; gap:.35rem; }
     .tree-node { min-width:0; white-space:nowrap; overflow:hidden; }
     .spot-grid { grid-template-columns:repeat(10,minmax(0,1fr)); min-width:0; width:100%; }
+    @media (min-width: 1200px) {
+      .tree-level { grid-template-columns:5rem repeat(10,minmax(0,1fr)); }
+    }
   </style>
   <style>
     :root { color-scheme: dark; --navy:#05070d; --blue:#00cfff; --blue-dark:#008fc2; --gold:#f5b83d; --ink:#edf7ff; --muted:#9db0c2; --line:#23354b; --surface:#0d1422; --background:#070b13; }
@@ -181,9 +186,9 @@
     .table-wrap th br { display:block; }
     .table-wrap th:first-child, .table-wrap td:first-child { width:5%; }
     .table-wrap th:nth-child(2), .table-wrap td:nth-child(2) { width:4%; }
-    .tree-section .tree-level { width:100%; min-width:0; grid-template-columns:3.2rem repeat(10,minmax(0,1fr)); gap:.18rem; margin-bottom:.25rem; }
-    .tree-section .tree-node { min-width:0; min-height:1.8rem; padding:.2rem .08rem; font-size:.46rem; }
-    .tree-section .tree-node small { font-size:.43rem; }
+    .tree-section .tree-level { width:100%; min-width:0; grid-template-columns:5.5rem repeat(10,minmax(0,1fr)); gap:.18rem; margin-bottom:.25rem; }
+    .tree-section .tree-node { min-width:0; min-height:3.2rem; width:100%; max-width:3.5rem; height:3.2rem; padding:.2rem; font-size:.46rem; aspect-ratio:1; justify-self:center; }
+    .tree-section .tree-node small { display: none; }
   </style>
   <style>
     /* Use the same two-column header as every other page. */
@@ -209,15 +214,14 @@
   <header class="page-hero">
     <div class="brand">
       <p class="eyebrow">NeedForge · Member dashboard</p>
-      <h1>Grow your place in the live tree.</h1>
+      <h1>Grow wealth and knowledge.</h1>
       <p>Track every level, cycle and available position in one clear view.</p>
     </div>
   </header>
   <main>
-    <div class="notice" id="status">
-      <strong>Supabase setup required</strong>
-      Add your Supabase URL and anon key in the configuration at the bottom of this file to enable shared registration and realtime updates.
-    </div>
+    <div class="notice" id="status"></div>
+    <section id="siteContentBlocks" class="info-grid" style="display:grid; grid-template-columns:repeat(2,minmax(280px,1fr)); gap:1rem; margin:0 0 1.5rem;"></section>
+
     <section class="tree-section">
       <h2>Live tree</h2>
       <div id="liveTree"></div>
@@ -238,6 +242,43 @@
   </main>
   <script src="pricing-config.js"></script>
   <script>
+    function renderSiteContent() {
+      const content = NeedForgeSiteContent.getSiteContent();
+      const status = document.querySelector('#status');
+      status.innerHTML = `<strong>${content.noticeTitle}</strong>${content.noticeBody}`;
+
+      const levelItems = (content.productList || []).map((item) => `<div>${item}</div>`).join('');
+      const bonusItems = (content.bonusProducts || []).map((item) => `<div>${item}</div>`).join('');
+      const freeItems = (content.freeProducts || []).map((item) => `<div>${item}</div>`).join('');
+      const siteBlocks = document.querySelector('#siteContentBlocks');
+      siteBlocks.innerHTML = `
+        <article class="page-card" style="padding:1.5rem; border:1px solid var(--line); border-radius:1rem; background:var(--surface); box-shadow:0 12px 32px rgba(0,0,0,.28);">
+          <h2>${content.howItWorksTitle}</h2>
+          <p>${content.howItWorksText}</p>
+        </article>
+
+        <article class="page-card" style="padding:1.5rem; border:1px solid var(--line); border-radius:1rem; background:var(--surface); box-shadow:0 12px 32px rgba(0,0,0,.28);">
+          <h2>${content.productsTitle}</h2>
+          <div class="mini-product-list" style="display:grid; gap:.6rem; margin-top:1rem;">${levelItems}</div>
+        </article>
+
+        <article class="page-card" style="padding:1.5rem; border:1px solid var(--line); border-radius:1rem; background:var(--surface); box-shadow:0 12px 32px rgba(0,0,0,.28);">
+          <h2>Bonus products</h2>
+          <div class="mini-product-list" style="display:grid; gap:.6rem; margin-top:1rem;">${bonusItems}</div>
+        </article>
+
+        <article class="page-card" style="padding:1.5rem; border:1px solid var(--line); border-radius:1rem; background:var(--surface); box-shadow:0 12px 32px rgba(0,0,0,.28);">
+          <h2>Free products</h2>
+          <div class="mini-product-list" style="display:grid; gap:.6rem; margin-top:1rem;">${freeItems}</div>
+        </article>
+      `;
+
+      const heroTitle = document.querySelector('.brand h1');
+      const heroSubtitle = document.querySelector('.brand p:last-of-type');
+      if (heroTitle) heroTitle.textContent = content.heroTitle;
+      if (heroSubtitle) heroSubtitle.textContent = content.heroSubtitle;
+    }
+
     const SUPABASE_URL = "https://YOUR_PROJECT.supabase.co";
     const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
     const supabaseReady = !SUPABASE_URL.includes("YOUR_") && !SUPABASE_ANON_KEY.includes("YOUR_");
@@ -266,16 +307,30 @@
       <td>${money(totals("tenCycles"))}</td><td>${money(rows.at(-1).cumulative)}</td>
     </tr>`;
     const liveTree = document.querySelector("#liveTree");
-    let treeSpots = [];
+    const demoTreeSpots = [
+      { level: 1, position: 1, cycle: 1, display_name: "Demo Member", email: "demo@needforge.com" },
+      { level: 1, position: 2, cycle: 1, display_name: "Alice Mokoena", email: "alice@needforge.com" },
+      { level: 2, position: 1, cycle: 1, display_name: "Level 2 Demo", email: "level2@needforge.com" }
+    ];
+    let treeSpots = demoTreeSpots;
+
+    function getLevelState(levelNumber) {
+      if (levelNumber <= 2) return "Open";
+      return "Locked";
+    }
+
     function renderTree() {
       liveTree.innerHTML = rows.map(item => {
+        const levelState = getLevelState(item.level);
         const nodes = Array.from({ length: 10 }, (_, index) => {
-          const member = treeSpots.find(spot => spot.level === item.level && spot.position === index + 1);
-          return `<button class="tree-node${member ? " occupied" : ""}" data-level="${item.level}">
-            Spot ${index + 1}<small>${member ? escapeHtml(member.display_name || member.email) : "Available"}</small>
+          const spotNumber = index + 1;
+          const isOccupied = treeSpots.some(spot => spot.level === item.level && spot.position === spotNumber);
+          return `<button class="tree-node${isOccupied ? " occupied" : ""}" data-level="${item.level}" data-spot="${spotNumber}">
+            Spot ${spotNumber}
           </button>`;
         }).join("");
-        return `<div class="tree-level"><div class="tree-label">Level ${item.level}</div>${nodes}</div>`;
+
+        return `<div class="tree-level"><div class="tree-label"><span>Level ${item.level}</span></div>${nodes}</div>`;
       }).join("");
       liveTree.querySelectorAll(".tree-node").forEach(button => button.addEventListener("click", () => showLevel(Number(button.dataset.level))));
     }
@@ -325,12 +380,14 @@
       if (client) await client.auth.signOut();
     });
     document.querySelectorAll(".level-button").forEach(button => button.addEventListener("click", () => showLevel(Number(button.dataset.level))));
+    renderSiteContent();
     renderTree();
     showLevel(1);
     if (client) {
       loadTree().catch(error => document.querySelector("#status").textContent = `Could not load the live tree: ${error.message}`);
       client.channel("tree-spots").on("postgres_changes", { event: "*", schema: "public", table: "tree_spots" }, () => loadTree()).subscribe();
     }
+    window.addEventListener('needforge-site-content-updated', renderSiteContent);
   </script>
 </body>
 </html>

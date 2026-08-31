@@ -7,6 +7,40 @@
   <link rel="stylesheet" href="shared.css?v=18">
 </head>
 <body>
+  <script src="site-content-config.js"></script>
+  <script>
+    const content = NeedForgeSiteContent.getSiteContent();
+    document.addEventListener('DOMContentLoaded', () => {
+      const pageContent = NeedForgeSiteContent.getSiteContent().affiliate;
+      document.querySelector('.eyebrow').textContent = pageContent.eyebrow;
+      document.querySelector('h1').textContent = pageContent.title;
+      document.querySelector('.page-hero p:last-of-type').textContent = pageContent.intro;
+      const section = document.querySelector('.page-card');
+      section.innerHTML = `
+        <h2>How the affiliate program works</h2>
+        <p>${pageContent.body1}</p>
+        <p>${pageContent.body2}</p>
+        <h2>Ready to join?</h2>
+        <p>${pageContent.lead}</p>
+        <a class="primary" href="payment.html">${pageContent.cta}</a>
+      `;
+    });
+    window.addEventListener('needforge-site-content-updated', () => {
+      const pageContent = NeedForgeSiteContent.getSiteContent().affiliate;
+      document.querySelector('.eyebrow').textContent = pageContent.eyebrow;
+      document.querySelector('h1').textContent = pageContent.title;
+      document.querySelector('.page-hero p:last-of-type').textContent = pageContent.intro;
+      const section = document.querySelector('.page-card');
+      section.innerHTML = `
+        <h2>How the affiliate program works</h2>
+        <p>${pageContent.body1}</p>
+        <p>${pageContent.body2}</p>
+        <h2>Ready to join?</h2>
+        <p>${pageContent.lead}</p>
+        <a class="primary" href="payment.html">${pageContent.cta}</a>
+      `;
+    });
+  </script>
   <header class="page-hero">
     <p class="eyebrow">NeedForge affiliate program</p>
     <h1>Grow together</h1>

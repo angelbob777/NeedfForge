@@ -8,9 +8,9 @@
   <section class="page-card"><h2>Company contact information</h2><div id="contactDetails" class="contact-details"></div></section>
   <section class="page-card"><h2>Send a message</h2><form id="contactForm"><label>Name<input name="name" required></label><label>Email<input name="email" type="email" required></label><label>Message<textarea name="message" rows="5" required></textarea></label><button class="primary">Send message</button></form><p id="message" class="muted" aria-live="polite"></p></section>
 </main>
+<script src="site-content-config.js"></script>
 <script>
-  const defaults={company:"NeedForge",email:"support@needforge.example",phone:"Contact details coming soon",address:"Business address coming soon",facebook:"",instagram:"",whatsapp:""};
-  const settings=Object.assign(defaults,JSON.parse(localStorage.getItem("needforgeContact")||"{}"));
+  const settings = NeedForgeSiteContent.getSiteContent().contact;
   const details=document.querySelector("#contactDetails");
   details.innerHTML=`<div class="contact-grid"><p><strong>Company</strong><span>${settings.company}</span></p><p><strong>Email</strong><a href="mailto:${settings.email}">${settings.email}</a></p><p><strong>Phone</strong><span>${settings.phone}</span></p><p><strong>Address</strong><span>${settings.address}</span></p></div><div class="social-links"><strong>Follow us</strong>${settings.facebook?`<a href="${settings.facebook}" target="_blank" rel="noopener">Facebook</a>`:""}${settings.instagram?`<a href="${settings.instagram}" target="_blank" rel="noopener">Instagram</a>`:""}${settings.whatsapp?`<a href="${settings.whatsapp}" target="_blank" rel="noopener">WhatsApp</a>`:""}${!settings.facebook&&!settings.instagram&&!settings.whatsapp?"<span class=\"muted\">Social links coming soon</span>":""}</div>`;
   const contactForm=document.querySelector("#contactForm");
@@ -25,6 +25,10 @@
     localStorage.setItem("needforgeTickets",JSON.stringify(tickets));
     document.querySelector("#message").textContent=`Message sent. Your ticket number is ${ticket}. Please keep it for follow-up.`;
     contactForm.reset();
+  });
+  window.addEventListener('needforge-site-content-updated', () => {
+    const updated = NeedForgeSiteContent.getSiteContent().contact;
+    details.innerHTML=`<div class="contact-grid"><p><strong>Company</strong><span>${updated.company}</span></p><p><strong>Email</strong><a href="mailto:${updated.email}">${updated.email}</a></p><p><strong>Phone</strong><span>${updated.phone}</span></p><p><strong>Address</strong><span>${updated.address}</span></p></div><div class="social-links"><strong>Follow us</strong>${updated.facebook?`<a href="${updated.facebook}" target="_blank" rel="noopener">Facebook</a>`:""}${updated.instagram?`<a href="${updated.instagram}" target="_blank" rel="noopener">Instagram</a>`:""}${updated.whatsapp?`<a href="${updated.whatsapp}" target="_blank" rel="noopener">WhatsApp</a>`:""}${!updated.facebook&&!updated.instagram&&!updated.whatsapp?"<span class=\"muted\">Social links coming soon</span>":""}</div>`;
   });
 </script>
 </body></html>

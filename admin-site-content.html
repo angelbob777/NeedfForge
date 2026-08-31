@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Site Content | NeedForge</title>
+  <link rel="stylesheet" href="shared.css?v=18">
+  <script src="auth.js"></script>
+</head>
+<body>
+  <nav class="site-nav">
+    <a class="nav-brand" href="home.html"><img src="logo.jpg" alt="NeedForge logo">NeedForge</a>
+    <div class="nav-links">
+      <a class="nav-admin" href="admin-dashboard.html">Admin</a>
+      <a href="admin-members.html">Members</a>
+      <a href="admin-levels.html">Levels</a>
+      <a href="admin-payments.html">Payments</a>
+      <a href="admin-products.html">Products</a>
+      <a href="admin-support.html">Support</a>
+      <a href="admin-settings.html">Settings</a>
+      <a href="admin-site-content.html">Site Content</a>
+      <a href="index.html">Logout</a>
+    </div>
+  </nav>
+
+  <header class="page-hero">
+    <p class="eyebrow">Administration</p>
+    <h1>Site content editor</h1>
+    <p>Change any public home content and it updates live for visitors instantly.</p>
+  </header>
+
+  <main class="page-main">
+    <section class="page-card">
+      <h2>Company and public settings</h2>
+      <form id="companySettingsForm">
+        <label>Company name<input name="company" type="text"></label>
+        <label>Contact email<input name="email" type="email"></label>
+        <label>Phone<input name="phone" type="text"></label>
+        <label>Address<textarea name="address" rows="2"></textarea></label>
+        <label>Facebook link<input name="facebook" type="url"></label>
+        <label>Instagram link<input name="instagram" type="url"></label>
+        <label>WhatsApp link<input name="whatsapp" type="url"></label>
+        <button class="primary" type="submit">Save company details</button>
+      </form>
+      <p id="companySettingsMessage" class="muted" aria-live="polite"></p>
+    </section>
+
+    <section class="page-card">
+      <h2>Home page content</h2>
+      <form id="siteContentForm">
+        <label>Hero title<input name="heroTitle" type="text"></label>
+        <label>Hero subtitle<textarea name="heroSubtitle" rows="2"></textarea></label>
+        <label>Notice title<input name="noticeTitle" type="text"></label>
+        <label>Notice text<textarea name="noticeBody" rows="3"></textarea></label>
+        <label>How it works title<input name="howItWorksTitle" type="text"></label>
+        <label>How it works text<textarea name="howItWorksText" rows="5"></textarea></label>
+        <label>Products title<input name="productsTitle" type="text"></label>
+        <label>Products list<textarea name="productList" rows="12" placeholder="One item per line"></textarea></label>
+        <button class="primary" type="submit">Save and publish live</button>
+      </form>
+      <p id="siteContentMessage" class="muted" aria-live="polite"></p>
+    </section>
+
+    <section class="page-card">
+      <h2>Affiliate page content</h2>
+      <form id="affiliateSettingsForm">
+        <label>Eyebrow<input name="affiliateEyebrow" type="text"></label>
+        <label>Title<input name="affiliateTitle" type="text"></label>
+        <label>Intro text<textarea name="affiliateIntro" rows="2"></textarea></label>
+        <label>Body 1<textarea name="affiliateBody1" rows="3"></textarea></label>
+        <label>Body 2<textarea name="affiliateBody2" rows="3"></textarea></label>
+        <label>Lead text<textarea name="affiliateLead" rows="2"></textarea></label>
+        <label>Button text<input name="affiliateCta" type="text"></label>
+        <button class="primary" type="submit">Save affiliate page</button>
+      </form>
+      <p id="affiliateSettingsMessage" class="muted" aria-live="polite"></p>
+    </section>
+
+    <section class="page-card">
+      <h2>Products and FAQ page text</h2>
+      <form id="catalogSettingsForm">
+        <label>Products eyebrow<input name="productsEyebrow" type="text"></label>
+        <label>Products title<input name="productsTitlePage" type="text"></label>
+        <label>Products intro<textarea name="productsIntro" rows="2"></textarea></label>
+        <label>FAQ eyebrow<input name="faqEyebrow" type="text"></label>
+        <label>FAQ title<input name="faqTitle" type="text"></label>
+        <label>FAQ intro<textarea name="faqIntro" rows="2"></textarea></label>
+        <button class="primary" type="submit">Save products and FAQ text</button>
+      </form>
+      <p id="catalogSettingsMessage" class="muted" aria-live="polite"></p>
+    </section>
+  </main>
+
+  <script src="site-content-config.js"></script>
+  <script>
+    const content = NeedForgeSiteContent.getSiteContent();
+    const companyForm = document.querySelector('#companySettingsForm');
+    const companyMessage = document.querySelector('#companySettingsMessage');
+    const siteForm = document.querySelector('#siteContentForm');
+    const siteMessage = document.querySelector('#siteContentMessage');
+    const affiliateForm = document.querySelector('#affiliateSettingsForm');
+    const affiliateMessage = document.querySelector('#affiliateSettingsMessage');
+    const catalogForm = document.querySelector('#catalogSettingsForm');
+    const catalogMessage = document.querySelector('#catalogSettingsMessage');
+
+    companyForm.elements.company.value = content.contact.company;
+    companyForm.elements.email.value = content.contact.email;
+    companyForm.elements.phone.value = content.contact.phone;
+    companyForm.elements.address.value = content.contact.address;
+    companyForm.elements.facebook.value = content.contact.facebook;
+    companyForm.elements.instagram.value = content.contact.instagram;
+    companyForm.elements.whatsapp.value = content.contact.whatsapp;
+
+    siteForm.elements.heroTitle.value = content.heroTitle;
+    siteForm.elements.heroSubtitle.value = content.heroSubtitle;
+    siteForm.elements.noticeTitle.value = content.noticeTitle;
+    siteForm.elements.noticeBody.value = content.noticeBody;
+    siteForm.elements.howItWorksTitle.value = content.howItWorksTitle;
+    siteForm.elements.howItWorksText.value = content.howItWorksText;
+    siteForm.elements.productsTitle.value = content.productsTitle;
+    siteForm.elements.productList.value = (content.productList || []).join('\n');
+
+    affiliateForm.elements.affiliateEyebrow.value = content.affiliate.eyebrow;
+    affiliateForm.elements.affiliateTitle.value = content.affiliate.title;
+    affiliateForm.elements.affiliateIntro.value = content.affiliate.intro;
+    affiliateForm.elements.affiliateBody1.value = content.affiliate.body1;
+    affiliateForm.elements.affiliateBody2.value = content.affiliate.body2;
+    affiliateForm.elements.affiliateLead.value = content.affiliate.lead;
+    affiliateForm.elements.affiliateCta.value = content.affiliate.cta;
+
+    catalogForm.elements.productsEyebrow.value = (content.productsPage && content.productsPage.eyebrow) || '';
+    catalogForm.elements.productsTitlePage.value = (content.productsPage && content.productsPage.title) || '';
+    catalogForm.elements.productsIntro.value = (content.productsPage && content.productsPage.intro) || '';
+    catalogForm.elements.faqEyebrow.value = (content.faqPage && content.faqPage.eyebrow) || '';
+    catalogForm.elements.faqTitle.value = (content.faqPage && content.faqPage.title) || '';
+    catalogForm.elements.faqIntro.value = (content.faqPage && content.faqPage.intro) || '';
+
+    companyForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const payload = NeedForgeSiteContent.getSiteContent();
+      payload.contact = {
+        company: companyForm.elements.company.value.trim() || NeedForgeSiteContent.DEFAULT_SITE_CONTENT.contact.company,
+        email: companyForm.elements.email.value.trim() || NeedForgeSiteContent.DEFAULT_SITE_CONTENT.contact.email,
+        phone: companyForm.elements.phone.value.trim() || NeedForgeSiteContent.DEFAULT_SITE_CONTENT.contact.phone,
+        address: companyForm.elements.address.value.trim() || NeedForgeSiteContent.DEFAULT_SITE_CONTENT.contact.address,
+        facebook: companyForm.elements.facebook.value.trim(),
+        instagram: companyForm.elements.instagram.value.trim(),
+        whatsapp: companyForm.elements.whatsapp.value.trim()
+      };
+      NeedForgeSiteContent.saveSiteContent(payload);
+      companyMessage.textContent = 'Saved. Contact information is now live.';
+    });
+
+    siteForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const payload = NeedForgeSiteContent.getSiteContent();
+      payload.heroTitle = siteForm.elements.heroTitle.value.trim() || NeedForgeSiteContent.DEFAULT_SITE_CONTENT.heroTitle;
+      payload.heroSubtitle = siteForm.elements.heroSubtitle.value.trim() || NeedForgeSiteContent.DEFAULT_SITE_CONTENT.heroSubtitle;
+      payload.noticeTitle = siteForm.elements.noticeTitle.value.trim() || NeedForgeSiteContent.DEFAULT_SITE_CONTENT.noticeTitle;
+      payload.noticeBody = siteForm.elements.noticeBody.value.trim() || NeedForgeSiteContent.DEFAULT_SITE_CONTENT.noticeBody;
+      payload.howItWorksTitle = siteForm.elements.howItWorksTitle.value.trim() || NeedForgeSiteContent.DEFAULT_SITE_CONTENT.howItWorksTitle;
+      payload.howItWorksText = siteForm.elements.howItWorksText.value.trim() || NeedForgeSiteContent.DEFAULT_SITE_CONTENT.howItWorksText;
+      payload.productsTitle = siteForm.elements.productsTitle.value.trim() || NeedForgeSiteContent.DEFAULT_SITE_CONTENT.productsTitle;
+      payload.productList = siteForm.elements.productList.value.split('\n').map((item) => item.trim()).filter(Boolean);
+      NeedForgeSiteContent.saveSiteContent(payload);
+      siteMessage.textContent = 'Saved. The home page content is live now.';
+    });
+
+    affiliateForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const payload = NeedForgeSiteContent.getSiteContent();
+      payload.affiliate = {
+        eyebrow: affiliateForm.elements.affiliateEyebrow.value.trim() || NeedForgeSiteContent.DEFAULT_SITE_CONTENT.affiliate.eyebrow,
+        title: affiliateForm.elements.affiliateTitle.value.trim() || NeedForgeSiteContent.DEFAULT_SITE_CONTENT.affiliate.title,
+        intro: affiliateForm.elements.affiliateIntro.value.trim() || NeedForgeSiteContent.DEFAULT_SITE_CONTENT.affiliate.intro,
+        body1: affiliateForm.elements.affiliateBody1.value.trim() || NeedForgeSiteContent.DEFAULT_SITE_CONTENT.affiliate.body1,
+        body2: affiliateForm.elements.affiliateBody2.value.trim() || NeedForgeSiteContent.DEFAULT_SITE_CONTENT.affiliate.body2,
+        lead: affiliateForm.elements.affiliateLead.value.trim() || NeedForgeSiteContent.DEFAULT_SITE_CONTENT.affiliate.lead,
+        cta: affiliateForm.elements.affiliateCta.value.trim() || NeedForgeSiteContent.DEFAULT_SITE_CONTENT.affiliate.cta
+      };
+      NeedForgeSiteContent.saveSiteContent(payload);
+      affiliateMessage.textContent = 'Saved. The affiliate page content is live now.';
+    });
+
+    catalogForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const payload = NeedForgeSiteContent.getSiteContent();
+      payload.productsPage = {
+        eyebrow: catalogForm.elements.productsEyebrow.value.trim() || NeedForgeSiteContent.DEFAULT_SITE_CONTENT.productsPage.eyebrow,
+        title: catalogForm.elements.productsTitlePage.value.trim() || NeedForgeSiteContent.DEFAULT_SITE_CONTENT.productsPage.title,
+        intro: catalogForm.elements.productsIntro.value.trim() || NeedForgeSiteContent.DEFAULT_SITE_CONTENT.productsPage.intro
+      };
+      payload.faqPage = {
+        eyebrow: catalogForm.elements.faqEyebrow.value.trim() || NeedForgeSiteContent.DEFAULT_SITE_CONTENT.faqPage.eyebrow,
+        title: catalogForm.elements.faqTitle.value.trim() || NeedForgeSiteContent.DEFAULT_SITE_CONTENT.faqPage.title,
+        intro: catalogForm.elements.faqIntro.value.trim() || NeedForgeSiteContent.DEFAULT_SITE_CONTENT.faqPage.intro
+      };
+      NeedForgeSiteContent.saveSiteContent(payload);
+      catalogMessage.textContent = 'Saved. The products and FAQ text is live now.';
+    });
+  </script>
+</body>
+</html>
