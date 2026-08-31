@@ -27,38 +27,48 @@
       <p id="paymentMessage" class="muted" aria-live="polite"></p>
     </section>
   </main>
+  <script src="pricing-config.js"></script>
   <script>
-    const levels = [
-      { fee: 100, upgrade: 250 }, { fee: 250, upgrade: 500 },
-      { fee: 500, upgrade: 1000 }, { fee: 1000, upgrade: 2500 },
-      { fee: 2500, upgrade: 5000 }, { fee: 5000, upgrade: 11000 },
-      { fee: 11000, upgrade: 25000 }, { fee: 25000, upgrade: 50000 },
-      { fee: 50000, upgrade: 100000 }, { fee: 100000, upgrade: null }
-    ];
-    const money = value => `R${value.toLocaleString("en-ZA")}`;
+    const levels = NeedForgePricing.getLevelPricing();
+    const money = NeedForgePricing.money;
     const target = document.querySelector("#targetLevel");
     const details = document.querySelector("#feeDetails");
-    levels.forEach((level, index) => {
-      const option = document.createElement("option");
-      option.value = index + 1;
-      option.textContent = `Level ${index + 1} · ${money(level.fee)} entry fee`;
-      target.append(option);
-    });
+
+    function populateTargetOptions() {
+      target.innerHTML = "";
+      levels.forEach((level) => {
+        const option = document.createElement("option");
+        option.value = level.level;
+        option.textContent = `Level ${level.level} · ${money(level.fee)} entry fee`;
+        target.append(option);
+      });
+    }
+
     function renderFees() {
       const targetLevel = Number(target.value);
       const included = levels.slice(0, targetLevel);
-      const total = included.reduce((sum, level) => sum + level.fee, 0);
+      const total = included.reduce((sum, level) => sum + Number(level.fee || 0), 0);
       details.innerHTML = `<strong>Required levels</strong>
         <ol>${included.map((level, index) => `<li>Level ${index + 1}: ${money(level.fee)} entry fee · 1 spot included</li>`).join("")}</ol>
         <strong>Total entry fees: ${money(total)}</strong>
         <p>After payment, your account is prepared for Level 1 through Level ${targetLevel}.</p>`;
     }
+
+    populateTargetOptions();
     target.addEventListener("change", renderFees);
     renderFees();
+
     document.querySelector("#payButton").addEventListener("click", () => {
       const targetLevel = Number(target.value);
-      const total = levels.slice(0, targetLevel).reduce((sum, level) => sum + level.fee, 0);
+      const total = levels.slice(0, targetLevel).reduce((sum, level) => sum + Number(level.fee || 0), 0);
       document.querySelector("#paymentMessage").textContent = `Stripe checkout will open for ${money(total)} once the secure Stripe server connection is configured.`;
+    });
+
+    window.addEventListener("needforge-pricing-updated", () => {
+      const refreshedLevels = NeedForgePricing.getLevelPricing();
+      levels.splice(0, levels.length, ...refreshedLevels);
+      populateTargetOptions();
+      renderFees();
     });
   </script>
 </body>

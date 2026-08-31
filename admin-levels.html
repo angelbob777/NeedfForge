@@ -26,16 +26,60 @@
   <main class="page-main">
     <section class="page-card">
       <h2>Level structure</h2>
-      <form>
+      <form id="pricingForm">
         <label>Current level<select><option>Level 1</option><option>Level 2</option><option>Level 3</option><option>Level 4</option><option>Level 5</option><option>Level 6</option><option>Level 7</option><option>Level 8</option><option>Level 9</option><option>Level 10</option></select></label>
         <label>Highest level reached<select><option>Level 1</option><option>Level 2</option><option>Level 3</option><option>Level 4</option><option>Level 5</option><option>Level 6</option><option>Level 7</option><option>Level 8</option><option>Level 9</option><option>Level 10</option></select></label>
         <label>Cycle count<input type="number" value="10"></label>
         <label>Spots per cycle<input type="number" value="5"></label>
         <label>Cycle status<select><option>Active</option><option>Paused</option><option>Closed</option></select></label>
         <label>Notes<textarea rows="4" placeholder="Document cycle changes or admin notes"></textarea></label>
-        <button class="primary" type="button">Save level update</button>
+
+        <h3 style="margin:1.5rem 0 .75rem;">Level pricing</h3>
+        <div id="levelPricingRows"></div>
+        <button class="primary" type="submit">Save level pricing</button>
+        <p id="pricingStatus" class="muted" aria-live="polite"></p>
       </form>
     </section>
   </main>
+  <script src="pricing-config.js"></script>
+  <script>
+    const pricingRows = document.querySelector("#levelPricingRows");
+    const pricingStatus = document.querySelector("#pricingStatus");
+
+    function renderPricingForm() {
+      const pricing = NeedForgePricing.getLevelPricing();
+      pricingRows.innerHTML = pricing.map((level) => `
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem; margin-bottom:1rem; padding:.9rem; border:1px solid #1d5871; border-radius:.75rem; background:#0a1b29;">
+          <label>
+            Level ${level.level} entry fee
+            <input type="number" min="0" step="1" name="level-${level.level}-fee" value="${level.fee}">
+          </label>
+          <label>
+            Level ${level.level} upgrade fee
+            <input type="number" min="0" step="1" name="level-${level.level}-upgrade" value="${level.upgrade == null ? "" : level.upgrade}">
+          </label>
+        </div>
+      `).join("");
+    }
+
+    document.querySelector("#pricingForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+      const pricing = [];
+      for (let index = 1; index <= 10; index += 1) {
+        const feeInput = document.querySelector(`input[name="level-${index}-fee"]`);
+        const upgradeInput = document.querySelector(`input[name="level-${index}-upgrade"]`);
+        pricing.push({
+          level: index,
+          fee: Number(feeInput.value || 0),
+          upgrade: upgradeInput.value === "" ? null : Number(upgradeInput.value || 0)
+        });
+      }
+
+      NeedForgePricing.saveLevelPricing(pricing);
+      pricingStatus.textContent = "Level pricing saved. The updated fees now reflect on payment and dashboard views.";
+    });
+
+    renderPricingForm();
+  </script>
 </body>
 </html>

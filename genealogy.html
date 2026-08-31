@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Genealogy | NeedForge</title>
-  <link rel="stylesheet" href="shared.css?v=9"><script src="auth.js"></script>
+  <link rel="stylesheet" href="shared.css?v=18"><script src="auth.js"></script>
 </head>
 <body>
   <nav class="site-nav">
@@ -14,7 +14,7 @@
   <header class="page-hero">
     <p class="eyebrow">Your network</p>
     <h1>Genealogy</h1>
-    <p>View the active cycle at each level. Every cycle has five spots.</p>
+    <p>View each level and the cycles below it. Every cycle has five spots.</p>
   </header>
   <main class="page-main">
     <section class="page-card genealogy-summary">
@@ -26,51 +26,153 @@
       </div>
     </section>
     <section class="page-card">
-      <h2>Active cycles</h2>
-      <p class="muted">Green indicates an active spot with member details. Blue indicates an inactive or unfilled spot and cannot be selected.</p>
+      <h2>Genealogy by level</h2>
+      <p class="muted">Choose a level to view its cycles. Select a cycle to view the MLM style spot tree.</p>
+      <div id="levelTabs" class="level-tabs" aria-label="Genealogy levels"></div>
       <div id="genealogyTree" class="genealogy-tree"></div>
     </section>
   </main>
   <script>
     const tree = document.querySelector("#genealogyTree");
+    const levelTabs = document.querySelector("#levelTabs");
     const currentPositions = document.querySelector("#currentPositions");
-    const activePositions = [{ level: 1, cycle: 1, spot: 1, member: "Demo Member" }];
+    const activePositions = [
+      { level: 1, cycle: 1, spot: 1, member: "Demo Member", username: "demouser", email: "demouser@needforge.com", phone: "+27 82 123 4567" },
+      { level: 1, cycle: 1, spot: 2, member: "Alice Mokoena", username: "alicem", email: "alice@needforge.com", phone: "+27 72 111 2233" },
+      { level: 1, cycle: 1, spot: 3, member: "Ben Ndlovu", username: "benn", email: "ben@needforge.com", phone: "+27 73 222 3344" },
+      { level: 1, cycle: 1, spot: 4, member: "Carmen Dlamini", username: "carmend", email: "carmen@needforge.com", phone: "+27 74 333 4455" },
+      { level: 1, cycle: 2, spot: 1, member: "Jane Smith", username: "janesmith", email: "jane@needforge.com", phone: "+27 71 555 3311" }
+    ];
+
     currentPositions.textContent = activePositions
       .map(position => `Level ${position.level} · Cycle ${position.cycle} · Spot ${position.spot}`)
       .join(" | ");
-    for (let level = 1; level <= 10; level += 1) {
-      const levelGroup = document.createElement("section");
+
+    function levelIsUnlocked(level) {
+      if (level === 1) return true;
+      return activePositions.some(position => position.level === level - 1);
+    }
+
+    function cycleIsUnlocked(level, cycleNumber) {
+      if (cycleNumber === 1) return true;
+      return activePositions.some(position => position.level === level && position.cycle === cycleNumber - 1);
+    }
+
+    function highestUnlockedLevel() {
+      let highest = 1;
+      for (let level = 1; level <= 10; level += 1) {
+        if (levelIsUnlocked(level)) {
+          highest = level;
+        }
+      }
+      return highest;
+    }
+
+    function buildLevelTabs(selectedLevel = 1) {
+      levelTabs.innerHTML = "";
+      for (let level = 1; level <= 10; level += 1) {
+        const unlocked = levelIsUnlocked(level);
+        const button = document.createElement("button");
+        button.type = "button";
+        button.disabled = !unlocked;
+        button.className = `level-tab ${level === selectedLevel ? "active" : ""} ${unlocked ? "" : "locked-level"}`;
+        button.textContent = `Level ${level}`;
+        button.setAttribute("aria-disabled", String(!unlocked));
+        if (unlocked) {
+          button.addEventListener("click", () => renderLevel(level));
+        }
+        levelTabs.append(button);
+      }
+    }
+
+    function memberDetails(position) {
+      if (!position) return "Unfilled\nInactive";
+      const name = position.member || "Member";
+      const username = position.username ? `@${position.username}` : "";
+      const email = position.email ? `<a href="mailto:${position.email}">${position.email}</a>` : "";
+      const phone = position.phone ? `<a href="https://wa.me/${position.phone.replace(/\D/g, "")}" target="_blank" rel="noopener noreferrer">${position.phone}</a>` : "";
+      return [name, username, email, phone].filter(Boolean).join("\n");
+    }
+
+    function renderCycleTree(level, cycleNumber) {
+      const cycleWrap = document.createElement("div");
+      cycleWrap.className = "cycle-tree-wrap";
+
+      const selectedSpot = activePositions.find(position => position.level === level && position.cycle === cycleNumber && position.spot >= 1);
+      const cycleHasMember = Boolean(selectedSpot);
+
+      const cycleTitle = document.createElement("div");
+      cycleTitle.className = "cycle-tree-head";
+      cycleTitle.innerHTML = `<strong>Cycle ${cycleNumber}</strong><span>${cycleHasMember ? "Active" : "Inactive"}</span>`;
+      cycleWrap.append(cycleTitle);
+
+      const treeView = document.createElement("div");
+      treeView.className = "cycle-tree-view";
+      treeView.innerHTML = `
+        <div class="tree-root ${cycleHasMember ? "active" : "inactive"}">
+          <span class="tree-node-label">${cycleHasMember ? memberDetails(selectedSpot) : "Open spot\nNo member"}</span>
+        </div>
+        <div class="tree-branch">
+          ${Array.from({ length: 5 }, (_, index) => {
+            const spotNumber = index + 1;
+            const position = activePositions.find(item => item.level === level && item.cycle === cycleNumber && item.spot === spotNumber);
+            const filled = Boolean(position);
+            return `
+              <div class="tree-node ${filled ? "active" : "inactive"}">
+                <span class="tree-node-label">Spot ${spotNumber}${filled ? `\n${memberDetails(position)}` : "\nUnfilled\nInactive"}</span>
+              </div>
+            `;
+          }).join("")}
+        </div>
+      `;
+      cycleWrap.append(treeView);
+      return cycleWrap;
+    }
+
+    function renderLevel(level) {
+      const unlockedLevel = highestUnlockedLevel();
+      const safeLevel = levelIsUnlocked(level) ? level : unlockedLevel;
+      tree.innerHTML = "";
+      buildLevelTabs(safeLevel);
+
+      const levelGroup = document.createElement("div");
       levelGroup.className = "genealogy-level-group";
-      levelGroup.innerHTML = `<h3>Level ${level}</h3><div class="cycle-list"></div>`;
-      const cycles = levelGroup.querySelector(".cycle-list");
+
+      const cycleList = document.createElement("div");
+      cycleList.className = "cycle-list";
+
       for (let cycleNumber = 1; cycleNumber <= 10; cycleNumber += 1) {
-        const activeCycle = activePositions.some(position => position.level === level && position.cycle === cycleNumber);
-        const cycle = document.createElement(activeCycle ? "button" : "div");
-        cycle.className = `cycle-row ${activeCycle ? "active-cycle" : "inactive-cycle"}`;
-        if (activeCycle) cycle.type = "button";
-        cycle.innerHTML = `<div class="cycle-heading"><strong>Cycle ${cycleNumber}</strong><span>${activeCycle ? "Active · Click to view 5 spots" : "Inactive"}</span></div>${activeCycle ? '<div class="genealogy-spots" hidden></div>' : ""}`;
-        if (activeCycle) {
-          const spots = cycle.querySelector(".genealogy-spots");
-          for (let spot = 1; spot <= 5; spot += 1) {
-            const card = document.createElement("div");
-            const position = activePositions.find(item => item.level === level && item.cycle === cycleNumber && item.spot === spot);
-            const currentMember = Boolean(position);
-            card.className = `cycle-spot ${currentMember ? "active" : "inactive"}`;
-            card.innerHTML = currentMember
-              ? `<strong>Spot ${spot}</strong><span>${position.member}</span><small>Active</small>`
-              : `<strong>Spot ${spot}</strong><span>Unfilled</span><small>Inactive</small>`;
-            spots.append(card);
-          }
-          cycle.addEventListener("click", () => {
-            const isOpen = !spots.hidden;
-            spots.hidden = isOpen;
-            cycle.classList.toggle("expanded", !isOpen);
+        const cycleButton = document.createElement("button");
+        cycleButton.type = "button";
+        const unlocked = cycleIsUnlocked(safeLevel, cycleNumber);
+        const isActive = activePositions.some(position => position.level === safeLevel && position.cycle === cycleNumber);
+        cycleButton.disabled = !unlocked;
+        cycleButton.className = `cycle-row ${isActive ? "active-cycle" : "inactive-cycle"} ${unlocked ? "" : "locked-cycle"}`;
+        cycleButton.innerHTML = `<div class="cycle-heading"><strong>Cycle ${cycleNumber}</strong><span>${!unlocked ? "Locked" : isActive ? "Active" : "Inactive"}</span></div>`;
+
+        const cyclePanel = document.createElement("div");
+        cyclePanel.className = "cycle-panel";
+        cyclePanel.hidden = true;
+
+        if (unlocked) {
+          cycleButton.addEventListener("click", () => {
+            const isOpen = !cyclePanel.hidden;
+            cyclePanel.hidden = isOpen;
+            cycleButton.classList.toggle("expanded", !isOpen);
+            if (!cyclePanel.childNodes.length) {
+              cyclePanel.append(renderCycleTree(safeLevel, cycleNumber));
+            }
           });
         }
-        cycles.append(cycle);
+
+        cycleList.append(cycleButton, cyclePanel);
       }
+
+      levelGroup.append(cycleList);
       tree.append(levelGroup);
     }
+
+    renderLevel(1);
   </script>
 </body>
 </html>

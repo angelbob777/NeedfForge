@@ -236,17 +236,14 @@
       </table>
     </div>
   </main>
+  <script src="pricing-config.js"></script>
   <script>
     const SUPABASE_URL = "https://YOUR_PROJECT.supabase.co";
     const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
     const supabaseReady = !SUPABASE_URL.includes("YOUR_") && !SUPABASE_ANON_KEY.includes("YOUR_");
     const client = supabaseReady ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
-    const levels = [
-      [90, 100, 250], [230, 250, 500], [470, 500, 1000], [960, 1000, 2500],
-      [2450, 2500, 5000], [4940, 5000, 11000], [10930, 11000, 25000],
-      [24970, 25000, 50000], [49920, 50000, 100000], [99910, 100000, null]
-    ];
-    const money = value => value == null ? "—" : `R${value.toLocaleString("en-ZA")}`;
+    const levels = NeedForgePricing.getLevelPricing().map(({ fee, upgrade }) => [fee, fee, upgrade]);
+    const money = NeedForgePricing.money;
     const rows = levels.map(([spot, fee, upgrade], index) => {
       const received = spot * 5;
       const cycleOne = received - fee - fee - (upgrade || 0);
