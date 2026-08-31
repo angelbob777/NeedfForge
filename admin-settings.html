@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin Settings | NeedForge</title>
+  <link rel="stylesheet" href="shared.css?v=18">
+  <script src="auth.js"></script>
+</head>
+<body>
+  <nav class="site-nav">
+    <a class="nav-brand" href="home.html"><img src="logo.jpg" alt="NeedForge logo">NeedForge</a>
+    <div class="nav-links">
+      <a class="nav-admin" href="admin-dashboard.html">Admin</a>
+      <a href="admin-members.html">Members</a>
+      <a href="admin-levels.html">Levels</a>
+      <a href="admin-payments.html">Payments</a>
+      <a href="admin-products.html">Products</a>
+      <a href="admin-support.html">Support</a>
+      <a href="admin-settings.html">Settings</a>
+      <a href="admin-access.html">Access</a>
+    </div>
+  </nav>
+  <header class="page-hero"><p class="eyebrow">Administration</p><h1>Company settings</h1><p>Manage public company details and social links.</p></header>
+  <main class="page-main">
+    <section class="page-card">
+      <h2>Public company details</h2>
+      <form id="contactSettings">
+        <label>Company name<input name="company" required></label>
+        <label>Contact email<input name="email" type="email" required></label>
+        <label>Phone<input name="phone"></label>
+        <label>Address<textarea name="address" rows="2"></textarea></label>
+        <label>Facebook link<input name="facebook" type="url" placeholder="https://facebook.com/..."></label>
+        <label>Instagram link<input name="instagram" type="url" placeholder="https://instagram.com/..."></label>
+        <label>WhatsApp link<input name="whatsapp" type="url" placeholder="https://wa.me/..."></label>
+        <button class="primary">Save settings</button>
+      </form>
+      <p id="settingsMessage" class="muted"></p>
+    </section>
+  </main>
+  <script>
+    const form=document.querySelector('#contactSettings'), saved=JSON.parse(localStorage.getItem('needforgeContact')||'{}');
+    Object.entries(saved).forEach(([key,value])=>{ if(form.elements[key]) form.elements[key].value=value; });
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      const data=Object.fromEntries(new FormData(form));
+      localStorage.setItem('needforgeContact', JSON.stringify(data));
+      document.querySelector('#settingsMessage').textContent='Saved. Open Contact Us to view the public details.';
+    });
+  </script>
+</body>
+</html>

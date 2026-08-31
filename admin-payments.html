@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin Payments | NeedForge</title>
+  <link rel="stylesheet" href="shared.css?v=18">
+  <script src="auth.js"></script>
+</head>
+<body>
+  <nav class="site-nav">
+    <a class="nav-brand" href="home.html"><img src="logo.jpg" alt="NeedForge logo">NeedForge</a>
+    <div class="nav-links">
+      <a class="nav-admin" href="admin-dashboard.html">Admin</a>
+      <a href="admin-members.html">Members</a>
+      <a href="admin-levels.html">Levels</a>
+      <a href="admin-payments.html">Payments</a>
+      <a href="admin-products.html">Products</a>
+      <a href="admin-support.html">Support</a>
+      <a href="admin-settings.html">Settings</a>
+      <a href="admin-access.html">Access</a>
+    </div>
+  </nav>
+  <header class="page-hero"><p class="eyebrow">Administration</p><h1>Payments and withdrawals</h1><p>Manage payment records, entry fees and payout requests.</p></header>
+  <main class="page-main">
+    <section class="page-card">
+      <h2>Payment review</h2>
+      <form>
+        <label>Transaction ID<input type="text" placeholder="NF-0001"></label>
+        <label>Member<input type="text" placeholder="Member username or email"></label>
+        <label>Payment status<select><option>Paid</option><option>Pending</option><option>Rejected</option></select></label>
+        <label>Amount<input type="text" placeholder="R0.00"></label>
+        <label>Admin note<textarea rows="4" placeholder="Add approval or rejection comments"></textarea></label>
+        <button class="primary" type="button">Save payment update</button>
+      </form>
+    </section>
+  </main>
+</body>
+</html>

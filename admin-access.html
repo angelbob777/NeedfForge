@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin Access | NeedForge</title>
+  <link rel="stylesheet" href="shared.css?v=18">
+  <script src="auth.js"></script>
+</head>
+<body>
+  <nav class="site-nav">
+    <a class="nav-brand" href="home.html"><img src="logo.jpg" alt="NeedForge logo">NeedForge</a>
+    <div class="nav-links">
+      <a class="nav-admin" href="admin-dashboard.html">Admin</a>
+      <a href="admin-members.html">Members</a>
+      <a href="admin-levels.html">Levels</a>
+      <a href="admin-payments.html">Payments</a>
+      <a href="admin-products.html">Products</a>
+      <a href="admin-support.html">Support</a>
+      <a href="admin-settings.html">Settings</a>
+      <a href="admin-access.html">Access</a>
+    </div>
+  </nav>
+  <header class="page-hero"><p class="eyebrow">Administration</p><h1>Admin access</h1><p>Approve, review and manage administrator roles and permissions.</p></header>
+  <main class="page-main">
+    <section class="page-card">
+      <h2>Administrator roles</h2>
+      <form>
+        <label>Admin name<input type="text" placeholder="Full name"></label>
+        <label>Username<input type="text" placeholder="admin username"></label>
+        <label>Role<select><option>Top admin</option><option>Support admin</option><option>Finance admin</option><option>Product admin</option></select></label>
+        <label>Status<select><option>Approved</option><option>Pending</option><option>Disabled</option></select></label>
+        <label>Notes<textarea rows="4" placeholder="Add role and approval notes"></textarea></label>
+        <button class="primary" type="button">Save admin access</button>
+      </form>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin Members | NeedForge</title>
+  <link rel="stylesheet" href="shared.css?v=18">
+  <script src="auth.js"></script>
+</head>
+<body>
+  <nav class="site-nav">
+    <a class="nav-brand" href="home.html"><img src="logo.jpg" alt="NeedForge logo">NeedForge</a>
+    <div class="nav-links">
+      <a class="nav-admin" href="admin-dashboard.html">Admin</a>
+      <a href="admin-members.html">Members</a>
+      <a href="admin-levels.html">Levels</a>
+      <a href="admin-payments.html">Payments</a>
+      <a href="admin-products.html">Products</a>
+      <a href="admin-support.html">Support</a>
+      <a href="admin-settings.html">Settings</a>
+      <a href="admin-access.html">Access</a>
+    </div>
+  </nav>
+  <header class="page-hero"><p class="eyebrow">Administration</p><h1>Member management</h1><p>Review registrations, profiles, positions and access status.</p></header>
+  <main class="page-main">
+    <section class="page-card">
+      <h2>Members</h2>
+      <form>
+        <label>Member search<input type="text" placeholder="Search by username or email"></label>
+        <label>Status<select><option>Active</option><option>Pending</option><option>Suspended</option></select></label>
+        <label>Current level<select><option>Level 1</option><option>Level 2</option><option>Level 3</option></select></label>
+        <label>Notes<textarea rows="4" placeholder="Update account notes or admin remarks"></textarea></label>
+        <button class="primary" type="button">Save member update</button>
+      </form>
+    </section>
+  </main>
+</body>
+</html>

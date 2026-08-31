@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin Support | NeedForge</title>
+  <link rel="stylesheet" href="shared.css?v=18">
+  <script src="auth.js"></script>
+</head>
+<body>
+  <nav class="site-nav">
+    <a class="nav-brand" href="home.html"><img src="logo.jpg" alt="NeedForge logo">NeedForge</a>
+    <div class="nav-links">
+      <a class="nav-admin" href="admin-dashboard.html">Admin</a>
+      <a href="admin-members.html">Members</a>
+      <a href="admin-levels.html">Levels</a>
+      <a href="admin-payments.html">Payments</a>
+      <a href="admin-products.html">Products</a>
+      <a href="admin-support.html">Support</a>
+      <a href="admin-settings.html">Settings</a>
+      <a href="admin-access.html">Access</a>
+    </div>
+  </nav>
+  <header class="page-hero"><p class="eyebrow">Administration</p><h1>Support and contact</h1><p>Review tickets, messages and public support information.</p></header>
+  <main class="page-main">
+    <section class="page-card">
+      <h2>Open support ticket</h2>
+      <form>
+        <label>Ticket number<input type="text" value="NF-1001"></label>
+        <label>Member<input type="text" placeholder="Member username or email"></label>
+        <label>Message<textarea rows="5" placeholder="Add response or support update"></textarea></label>
+        <label>Status<select><option>Open</option><option>In progress</option><option>Closed</option></select></label>
+        <button class="primary" type="button">Save ticket update</button>
+      </form>
+    </section>
+  </main>
+</body>
+</html>

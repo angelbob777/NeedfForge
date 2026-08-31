@@ -1,12 +1,23 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin Control Centre | NeedForge</title><link rel="stylesheet" href="shared.css?v=13"><script src="auth.js"></script></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin Control Centre | NeedForge</title><link rel="stylesheet" href="shared.css?v=18"><script src="auth.js"></script></head>
 <body>
-<nav class="site-nav"><a class="nav-brand" href="home.html"><img src="logo.jpg" alt="NeedForge logo">NeedForge</a><div class="nav-links"><a class="nav-admin" href="admin-login.html">Admin</a><a href="home.html">Home</a><a href="genealogy.html">Genealogy</a><a href="products.html">Products</a><a href="faq.html">FAQ</a><a href="contact.html">Contact Us</a><a href="payment.html">Payment</a><a class="nav-login" href="user-login.html">Login / Register</a></div></nav>
+<nav class="site-nav">
+  <a class="nav-brand" href="home.html"><img src="logo.jpg" alt="NeedForge logo">NeedForge</a>
+  <div class="nav-links">
+    <a class="nav-admin" href="admin-dashboard.html">Admin</a>
+    <a href="admin-members.html">Members</a>
+    <a href="admin-levels.html">Levels</a>
+    <a href="admin-payments.html">Payments</a>
+    <a href="admin-products.html">Products</a>
+    <a href="admin-support.html">Support</a>
+    <a href="admin-settings.html">Settings</a>
+    <a href="admin-access.html">Access</a>
+  </div>
+</nav>
 <header class="page-hero"><p class="eyebrow">Administration</p><h1>Admin control centre</h1><p>Manage members, levels, cycles, payments, products, support and administrator access from one place.</p></header>
 <main class="page-main">
   <section class="page-card"><h2>Company and social details</h2><p class="muted">These settings are saved in this browser and displayed on the Contact Us page.</p><form id="contactSettings"><label>Company name<input name="company" required></label><label>Contact email<input name="email" type="email" required></label><label>Phone<input name="phone"></label><label>Address<textarea name="address" rows="2"></textarea></label><label>Facebook link<input name="facebook" type="url" placeholder="https://facebook.com/..."></label><label>Instagram link<input name="instagram" type="url" placeholder="https://instagram.com/..."></label><label>WhatsApp link<input name="whatsapp" type="url" placeholder="https://wa.me/..."></label><button class="primary">Save public contact details</button></form><p id="settingsMessage" class="muted"></p></section>
-  <section class="page-card"><h2>Admin work areas</h2><div class="level-links"><a href="home.html">Dashboard<br><strong>View live tree</strong></a><a href="genealogy.html">Members<br><strong>Review genealogy</strong></a><a href="payment.html">Payments<br><strong>Entry fees & withdrawals</strong></a><a href="products.html">Products<br><strong>Manage resources</strong></a><a href="contact.html">Support<br><strong>Tickets & contact</strong></a><a href="faq.html">Content<br><strong>FAQs & messages</strong></a><a href="#contactSettings">Settings<br><strong>Company details</strong></a><a href="admin-login.html">Admin access<br><strong>Roles & permissions</strong></a></div></section>
 </main>
 <script>
   const form=document.querySelector("#contactSettings"), saved=JSON.parse(localStorage.getItem("needforgeContact")||"{}");
