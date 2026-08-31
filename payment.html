@@ -4,25 +4,62 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Payment | NeedForge</title>
-  <link rel="stylesheet" href="shared.css?v=6">
+  <link rel="stylesheet" href="shared.css?v=18">
 </head>
 <body>
   <nav class="site-nav">
-    <a class="nav-brand" href="index.html"><img src="logo.jpg" alt="NeedForge logo">NeedForge</a>
-    <div class="nav-links"><a href="index.html">Home</a><a href="genealogy.html">Genealogy</a><a href="products.html">Products</a><a href="faq.html">FAQ</a><a href="contact.html">Contact Us</a><a href="payment.html">Payment</a><a class="nav-login" href="user-login.html">Login / Register</a><a class="nav-admin" href="admin-login.html">Admin</a></div>
+    <a class="nav-brand" href="home.html"><img src="logo.jpg" alt="NeedForge logo">NeedForge</a>
+    <div class="nav-links"><a class="nav-admin" href="admin-login.html">Admin</a><a href="home.html">Home</a><a href="genealogy.html">Genealogy</a><a href="products.html">Products</a><a href="faq.html">FAQ</a><a href="contact.html">Contact Us</a><a href="payment.html">Payment</a><a class="nav-login" href="user-login.html">Login / Register</a></div>
   </nav>
   <header class="page-hero">
-    <p class="eyebrow">Secure checkout</p>
+    <p class="eyebrow">Entry fees</p>
     <h1>Payment</h1>
-    <p>Choose your level and follow the payment instructions provided by NeedForge.</p>
+    <p>Choose any target level. Your entry includes every level from Level 1 through your target level.</p>
   </header>
   <main class="page-main">
     <section class="page-card">
-      <h2>Payment setup</h2>
-      <p class="muted">Online card checkout is not connected yet. No payment details are collected on this page.</p>
-      <p>To activate payments, NeedForge must connect a verified payment provider and publish the final pricing and refund terms.</p>
-      <a class="primary" href="contact.html">Contact us about payment</a>
+      <h2>Select your target level</h2>
+      <label for="targetLevel">I want to join up to:</label>
+      <select id="targetLevel"></select>
+      <div id="feeDetails" class="summary" aria-live="polite"></div>
+      <p class="muted">Each included level receives one spot. Card details are entered on Stripe's secure checkout and are never stored by NeedForge.</p>
+      <button class="primary" id="payButton" type="button">Pay</button>
+      <p id="paymentMessage" class="muted" aria-live="polite"></p>
     </section>
   </main>
+  <script>
+    const levels = [
+      { fee: 100, upgrade: 250 }, { fee: 250, upgrade: 500 },
+      { fee: 500, upgrade: 1000 }, { fee: 1000, upgrade: 2500 },
+      { fee: 2500, upgrade: 5000 }, { fee: 5000, upgrade: 11000 },
+      { fee: 11000, upgrade: 25000 }, { fee: 25000, upgrade: 50000 },
+      { fee: 50000, upgrade: 100000 }, { fee: 100000, upgrade: null }
+    ];
+    const money = value => `R${value.toLocaleString("en-ZA")}`;
+    const target = document.querySelector("#targetLevel");
+    const details = document.querySelector("#feeDetails");
+    levels.forEach((level, index) => {
+      const option = document.createElement("option");
+      option.value = index + 1;
+      option.textContent = `Level ${index + 1} · ${money(level.fee)} entry fee`;
+      target.append(option);
+    });
+    function renderFees() {
+      const targetLevel = Number(target.value);
+      const included = levels.slice(0, targetLevel);
+      const total = included.reduce((sum, level) => sum + level.fee, 0);
+      details.innerHTML = `<strong>Required levels</strong>
+        <ol>${included.map((level, index) => `<li>Level ${index + 1}: ${money(level.fee)} entry fee · 1 spot included</li>`).join("")}</ol>
+        <strong>Total entry fees: ${money(total)}</strong>
+        <p>After payment, your account is prepared for Level 1 through Level ${targetLevel}.</p>`;
+    }
+    target.addEventListener("change", renderFees);
+    renderFees();
+    document.querySelector("#payButton").addEventListener("click", () => {
+      const targetLevel = Number(target.value);
+      const total = levels.slice(0, targetLevel).reduce((sum, level) => sum + level.fee, 0);
+      document.querySelector("#paymentMessage").textContent = `Stripe checkout will open for ${money(total)} once the secure Stripe server connection is configured.`;
+    });
+  </script>
 </body>
 </html>

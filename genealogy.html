@@ -1,1 +1,76 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Genealogy | NeedForge</title><link rel="stylesheet" href="shared.css?v=6"></head><body><nav class="site-nav"><a class="nav-brand" href="index.html"><img src="logo.jpg" alt="NeedForge logo">NeedForge</a><div class="nav-links"><a href="index.html">Home</a><a href="genealogy.html">Genealogy</a><a href="products.html">Products</a><a href="faq.html">FAQ</a><a href="contact.html">Contact Us</a><a href="payment.html">Payment</a><a class="nav-login" href="user-login.html">Login / Register</a><a class="nav-admin" href="admin-login.html">Admin</a></div></nav><header class="page-hero"><p class="eyebrow">Your network</p><h1>Genealogy</h1><p>See your sponsor, position and the ten spots connected to your placement.</p></header><main class="page-main"><section class="page-card"><h2>Demo genealogy preview</h2><p class="muted">This preview shows how a member’s sponsor, position and ten connected spots will appear.</p><div class="level-links"><a href="#">Sponsor · Demo Member</a><a href="#">Your spot · Level 1 / Spot 1</a><a href="#">Downline · 5 positions</a></div><a class="primary" href="user-login.html">User login</a></section></main></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Genealogy | NeedForge</title>
+  <link rel="stylesheet" href="shared.css?v=9"><script src="auth.js"></script>
+</head>
+<body>
+  <nav class="site-nav">
+    <a class="nav-brand" href="home.html"><img src="logo.jpg" alt="NeedForge logo">NeedForge</a>
+    <div class="nav-links"><a class="nav-admin" href="admin-login.html">Admin</a><a href="home.html">Home</a><a href="genealogy.html">Genealogy</a><a href="products.html">Products</a><a href="faq.html">FAQ</a><a href="contact.html">Contact Us</a><a href="payment.html">Payment</a><a class="nav-login" href="user-login.html">Login / Register</a></div>
+  </nav>
+  <header class="page-hero">
+    <p class="eyebrow">Your network</p>
+    <h1>Genealogy</h1>
+    <p>View the active cycle at each level. Every cycle has five spots.</p>
+  </header>
+  <main class="page-main">
+    <section class="page-card genealogy-summary">
+      <h2>Your genealogy</h2>
+      <div class="level-links">
+        <div><span class="muted">Member</span><strong>Demo Member</strong></div>
+        <div><span class="muted">Sponsor</span><strong>NeedForge</strong></div>
+        <div><span class="muted">Current position</span><strong id="currentPositions">Loading active positions...</strong></div>
+      </div>
+    </section>
+    <section class="page-card">
+      <h2>Active cycles</h2>
+      <p class="muted">Green indicates an active spot with member details. Blue indicates an inactive or unfilled spot and cannot be selected.</p>
+      <div id="genealogyTree" class="genealogy-tree"></div>
+    </section>
+  </main>
+  <script>
+    const tree = document.querySelector("#genealogyTree");
+    const currentPositions = document.querySelector("#currentPositions");
+    const activePositions = [{ level: 1, cycle: 1, spot: 1, member: "Demo Member" }];
+    currentPositions.textContent = activePositions
+      .map(position => `Level ${position.level} · Cycle ${position.cycle} · Spot ${position.spot}`)
+      .join(" | ");
+    for (let level = 1; level <= 10; level += 1) {
+      const levelGroup = document.createElement("section");
+      levelGroup.className = "genealogy-level-group";
+      levelGroup.innerHTML = `<h3>Level ${level}</h3><div class="cycle-list"></div>`;
+      const cycles = levelGroup.querySelector(".cycle-list");
+      for (let cycleNumber = 1; cycleNumber <= 10; cycleNumber += 1) {
+        const activeCycle = activePositions.some(position => position.level === level && position.cycle === cycleNumber);
+        const cycle = document.createElement(activeCycle ? "button" : "div");
+        cycle.className = `cycle-row ${activeCycle ? "active-cycle" : "inactive-cycle"}`;
+        if (activeCycle) cycle.type = "button";
+        cycle.innerHTML = `<div class="cycle-heading"><strong>Cycle ${cycleNumber}</strong><span>${activeCycle ? "Active · Click to view 5 spots" : "Inactive"}</span></div>${activeCycle ? '<div class="genealogy-spots" hidden></div>' : ""}`;
+        if (activeCycle) {
+          const spots = cycle.querySelector(".genealogy-spots");
+          for (let spot = 1; spot <= 5; spot += 1) {
+            const card = document.createElement("div");
+            const position = activePositions.find(item => item.level === level && item.cycle === cycleNumber && item.spot === spot);
+            const currentMember = Boolean(position);
+            card.className = `cycle-spot ${currentMember ? "active" : "inactive"}`;
+            card.innerHTML = currentMember
+              ? `<strong>Spot ${spot}</strong><span>${position.member}</span><small>Active</small>`
+              : `<strong>Spot ${spot}</strong><span>Unfilled</span><small>Inactive</small>`;
+            spots.append(card);
+          }
+          cycle.addEventListener("click", () => {
+            const isOpen = !spots.hidden;
+            spots.hidden = isOpen;
+            cycle.classList.toggle("expanded", !isOpen);
+          });
+        }
+        cycles.append(cycle);
+      }
+      tree.append(levelGroup);
+    }
+  </script>
+</body>
+</html>

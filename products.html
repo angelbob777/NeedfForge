@@ -1,12 +1,53 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Products | NeedForge</title><link rel="stylesheet" href="shared.css?v=6"></head><body><nav class="site-nav"><a class="nav-brand" href="index.html"><img src="logo.jpg" alt="NeedForge logo">NeedForge</a><div class="nav-links"><a href="index.html">Home</a><a href="genealogy.html">Genealogy</a><a href="products.html">Products</a><a href="faq.html">FAQ</a><a href="contact.html">Contact Us</a><a href="payment.html">Payment</a><a class="nav-login" href="user-login.html">Login / Register</a><a class="nav-admin" href="admin-login.html">Admin</a></div></nav><header class="page-hero"><p class="eyebrow">Member resources</p><h1>Products</h1><p>Each product becomes available when its assigned level is unlocked.</p></header><main class="page-main"><section class="page-card"><h2>Products by level</h2><p class="muted">Products unlock as each level opens. Every level has space for its product video, image, description and download link.</p><div class="product-list">
-<article class="product-level"><div class="product-header"><h3>Level 1 product</h3><span class="status">Opened</span></div><div class="product-grid"><div class="product-slot">Product video placeholder</div><div class="product-slot">Product image placeholder</div><div class="product-slot product-description">Product description will appear here.<a class="product-link" href="downloads/level-1-product.pdf" download>Download Level 1 product</a></div></div></article>
-<article class="product-level locked"><div class="product-header"><h3>Level 2 product</h3><span class="status locked">Locked</span></div><div class="product-grid"><div class="product-slot">Video locked</div><div class="product-slot">Image locked</div><div class="product-slot product-description">Unlock Level 2 to view the description and product link.</div></div></article>
-<article class="product-level locked"><div class="product-header"><h3>Level 3 product</h3><span class="status locked">Locked</span></div><div class="product-grid"><div class="product-slot">Video locked</div><div class="product-slot">Image locked</div><div class="product-slot product-description">Unlock Level 3 to view the description and product link.</div></div></article>
-<article class="product-level locked"><div class="product-header"><h3>Level 4 product</h3><span class="status locked">Locked</span></div><div class="product-grid"><div class="product-slot">Video locked</div><div class="product-slot">Image locked</div><div class="product-slot product-description">Unlock Level 4 to view the description and product link.</div></div></article>
-<article class="product-level locked"><div class="product-header"><h3>Level 5 product</h3><span class="status locked">Locked</span></div><div class="product-grid"><div class="product-slot">Video locked</div><div class="product-slot">Image locked</div><div class="product-slot product-description">Unlock Level 5 to view the description and product link.</div></div></article>
-<article class="product-level locked"><div class="product-header"><h3>Level 6 product</h3><span class="status locked">Locked</span></div><div class="product-grid"><div class="product-slot">Video locked</div><div class="product-slot">Image locked</div><div class="product-slot product-description">Unlock Level 6 to view the description and product link.</div></div></article>
-<article class="product-level locked"><div class="product-header"><h3>Level 7 product</h3><span class="status locked">Locked</span></div><div class="product-grid"><div class="product-slot">Video locked</div><div class="product-slot">Image locked</div><div class="product-slot product-description">Unlock Level 7 to view the description and product link.</div></div></article>
-<article class="product-level locked"><div class="product-header"><h3>Level 8 product</h3><span class="status locked">Locked</span></div><div class="product-grid"><div class="product-slot">Video locked</div><div class="product-slot">Image locked</div><div class="product-slot product-description">Unlock Level 8 to view the description and product link.</div></div></article>
-<article class="product-level locked"><div class="product-header"><h3>Level 9 product</h3><span class="status locked">Locked</span></div><div class="product-grid"><div class="product-slot">Video locked</div><div class="product-slot">Image locked</div><div class="product-slot product-description">Unlock Level 9 to view the description and product link.</div></div></article>
-<article class="product-level locked"><div class="product-header"><h3>Level 10 product</h3><span class="status locked">Locked</span></div><div class="product-grid"><div class="product-slot">Video locked</div><div class="product-slot">Image locked</div><div class="product-slot product-description">Unlock Level 10 to view the description and product link.</div></div></article>
-</div></section></main></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Products | NeedForge</title>
+  <link rel="stylesheet" href="shared.css?v=18">
+</head>
+<body>
+  <nav class="site-nav">
+    <a class="nav-brand" href="home.html"><img src="logo.jpg" alt="NeedForge logo">NeedForge</a>
+    <div class="nav-links"><a class="nav-admin" href="admin-login.html">Admin</a><a href="home.html">Home</a><a href="genealogy.html">Genealogy</a><a href="products.html">Products</a><a href="faq.html">FAQ</a><a href="contact.html">Contact Us</a><a href="payment.html">Payment</a><a class="nav-login" href="user-login.html">Login / Register</a></div>
+  </nav>
+  <header class="page-hero">
+    <p class="eyebrow">Member resources</p>
+    <h1>Products</h1>
+    <p>Browse level products, bonus products and free resources. Select an item to view its full details.</p>
+  </header>
+  <main class="page-main">
+    <section class="page-card">
+      <h2>Products by level</h2>
+      <p class="muted">Each overview stays compact until you open it.</p>
+      <div class="product-list">
+        <details class="product-level" open>
+          <summary><span>Level 1 product</span><span class="status">Opened</span></summary>
+          <div class="product-grid product-expanded"><div class="product-slot">Product video placeholder</div><div class="product-slot">Product image placeholder</div><div class="product-slot product-description">Product description will appear here.<a class="product-link" href="downloads/level-1-product.pdf" download>Download Level 1 product</a></div></div>
+        </details>
+        <script>
+          for (let level = 2; level <= 10; level += 1) {
+            document.write(`<details class="product-level locked"><summary><span>Level ${level} product</span><span class="status locked">Locked</span></summary><div class="product-grid product-expanded"><div class="product-slot">Video locked</div><div class="product-slot">Image locked</div><div class="product-slot product-description">Unlock Level ${level} to view the description and product link.</div></div></details>`);
+          }
+        </script>
+      </div>
+    </section>
+    <section class="page-card">
+      <h2>Bonus products</h2>
+      <p class="muted">Additional resources made available as member bonuses.</p>
+      <div class="resource-list">
+        <details class="resource-item"><summary>Bonus product collection <span class="status locked">Coming soon</span></summary><p>Bonus product details and downloads will appear here when published.</p></details>
+        <details class="resource-item"><summary>Member bonus resource <span class="status locked">Coming soon</span></summary><p>Exclusive bonus content will be added here.</p></details>
+      </div>
+    </section>
+    <section class="page-card">
+      <h2>Free products</h2>
+      <p class="muted">Free resources available to everyone.</p>
+      <div class="resource-list">
+        <details class="resource-item" open><summary>NeedForge starter guide <span class="status">Free</span></summary><p>A free introduction to the NeedForge platform and member dashboard.</p><a class="product-link" href="contact.html">Request the free guide</a></details>
+        <details class="resource-item"><summary>Free member checklist <span class="status">Free</span></summary><p>A simple checklist to help new members understand levels, cycles and products.</p></details>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
