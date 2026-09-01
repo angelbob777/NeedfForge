@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -209,11 +209,11 @@
 <body>
   <nav class="site-nav">
     <a class="nav-brand" href="home.html"><img src="logo.jpg" alt="NeedForge logo">NeedForge</a>
-    <div class="nav-links"><a class="nav-admin" href="admin-login.html">Admin</a><a href="home.html">Home</a><a href="genealogy.html">Genealogy</a><a href="products.html">Products</a><a href="faq.html">FAQ</a><a href="contact.html">Contact Us</a><a href="payment.html">Payment</a><a class="nav-login" href="user-login.html">Login / Register</a></div>
+    <div class="nav-links"><a href="home.html">Dashboard</a><a href="genealogy.html">Genealogy</a><a href="products.html">Products</a><a href="faq.html">FAQ</a><a href="contact.html">Contact Us</a><a href="payment.html">Payment</a><a class="nav-login" href="index.html" data-logout="true">Logout</a></div>
   </nav>
   <header class="page-hero">
     <div class="brand">
-      <p class="eyebrow">NeedForge · Member dashboard</p>
+      <p class="eyebrow">NeedForge Â· Member dashboard</p>
       <h1>Grow wealth and knowledge.</h1>
       <p>Track every level, cycle and available position in one clear view.</p>
     </div>
@@ -314,26 +314,32 @@
     const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
     const supabaseReady = !SUPABASE_URL.includes("YOUR_") && !SUPABASE_ANON_KEY.includes("YOUR_");
     const client = supabaseReady ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
-    const levels = NeedForgePricing.getLevelPricing().map(({ fee, upgrade }) => [fee, fee, upgrade]);
     const money = NeedForgePricing.money;
-    const rows = levels.map(([spot, fee, upgrade], index) => {
-      const received = spot * 5;
+    const levels = NeedForgePricing.getLevelPricing();
+    const rows = levels.map(({ fee, upgrade }, index) => {
+      const spotValue = fee;
+      const received = spotValue * 5;
       const cycleOne = received - fee - fee - (upgrade || 0);
       const later = received - fee;
       const tenCycles = cycleOne + later * 9;
-      const previous = index ? levels.slice(0, index).reduce((sum, [s, f, u], i) => sum + (s * 5 - f - f - (u || 0)) + ((s * 5 - f) * 9), 0) : 0;
-      return { level: index + 1, spot, received, fee, upgrade, cycleOne, later, tenCycles, cumulative: previous + tenCycles };
+      const previous = index ? levels.slice(0, index).reduce((sum, level) => {
+        const levelFee = Number(level.fee) || 0;
+        const levelUpgrade = Number(level.upgrade) || 0;
+        const levelReceived = levelFee * 5;
+        return sum + (levelReceived - levelFee - levelFee - levelUpgrade) + ((levelReceived - levelFee) * 9);
+      }, 0) : 0;
+      return { level: index + 1, spot: spotValue, received, fee, upgrade, cycleOne, later, tenCycles, cumulative: previous + tenCycles };
     });
     const row = item => `<tr>
       <td><button class="level-button" data-level="${item.level}">Level ${item.level}</button></td>
       <td>5</td><td>${money(item.spot)}</td><td>${money(item.received)}</td><td>${money(item.fee)}</td>
-      <td>${item.upgrade ? `${money(item.upgrade)} → L${item.level + 1}` : "Final level"}</td>
+      <td>${item.upgrade ? `${money(item.upgrade)} â†’ L${item.level + 1}` : "Final level"}</td>
       <td>${money(item.cycleOne)}</td><td>${money(item.later)}</td><td>${money(item.tenCycles)}</td><td>${money(item.cumulative)}</td>
     </tr>`;
     document.querySelector("#levelRows").innerHTML = rows.map(row).join("");
     const totals = key => rows.reduce((sum, item) => sum + item[key], 0);
     document.querySelector("#totalsRow").innerHTML = `<tr class="total-row">
-      <td>TOTAL</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+      <td>TOTAL</td><td>â€”</td><td>â€”</td><td>â€”</td><td>â€”</td><td>â€”</td>
       <td>${money(totals("cycleOne"))}</td><td>${money(totals("later"))}</td>
       <td>${money(totals("tenCycles"))}</td><td>${money(rows.at(-1).cumulative)}</td>
     </tr>`;
@@ -422,3 +428,5 @@
   </script>
 </body>
 </html>
+
+

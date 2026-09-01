@@ -1,11 +1,11 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin Control Centre | NeedForge</title><link rel="stylesheet" href="shared.css?v=18"><script src="auth.js"></script></head>
 <body>
 <nav class="site-nav">
   <a class="nav-brand" href="home.html"><img src="logo.jpg" alt="NeedForge logo">NeedForge</a>
   <div class="nav-links">
-    <a class="nav-admin" href="admin-dashboard.html">Admin</a>
+    
     <a href="admin-members.html">Members</a>
     <a href="admin-levels.html">Levels</a>
     <a href="admin-payments.html">Payments</a>
@@ -14,7 +14,7 @@
     <a href="admin-settings.html">Settings</a>
     <a href="admin-site-content.html">Site Content</a>
     <a href="admin-access.html">Access</a>
-    <a href="index.html">Logout</a>
+    <a href="index.html" data-logout="true">Logout</a>
   </div>
 </nav>
 <header class="page-hero"><p class="eyebrow">Administration</p><h1>Admin control centre</h1><p>Manage members, levels, cycles, payments, products, support and administrator access from one place.</p></header>
@@ -27,3 +27,4 @@
   form.addEventListener("submit",event=>{event.preventDefault();const data=Object.fromEntries(new FormData(form));localStorage.setItem("needforgeContact",JSON.stringify(data));document.querySelector("#settingsMessage").textContent="Saved. Open Contact Us to view the public details.";});
 </script>
 </body></html>
+

@@ -29,6 +29,10 @@
     .access-actions button { margin:0; }
     .access-panel[hidden] { display:none; }
     .admin-note { padding:.75rem; color:var(--muted); border:1px solid #6d5421; border-radius:.5rem; background:#201b0f; }
+    .affiliate-income-table { width:100%; overflow-x:auto; margin-top:1.5rem; }
+    .affiliate-income-table table { width:100%; border-collapse:collapse; font-size:.82rem; }
+    .affiliate-income-table th, .affiliate-income-table td { padding:.7rem .55rem; text-align:center; border-bottom:1px solid var(--line); }
+    .affiliate-income-table th:first-child, .affiliate-income-table td:first-child { text-align:left; }
     .join-callout { padding:1rem; margin-top:1.2rem; color:#061019; font-size:1.1rem; font-weight:900; text-align:center; border-radius:.7rem; background:var(--gold); }
     .intro-card img { width:100%; height:120px; object-fit:cover; margin-bottom:1rem; border-radius:.7rem; }
     #accessMessage { min-height:1.3rem; }
@@ -45,45 +49,36 @@
     <section class="access-grid">
       <div class="access-card">
         <h2>Member access</h2>
-        <div class="access-actions">
-          <button class="primary" type="button" data-panel="registerPanel">Register</button>
-          <button class="primary" type="button" data-panel="demoPanel">View demo</button>
-          <button class="primary" type="button" data-panel="adminPanel">Admin login</button>
-        </div>
-        <div id="loginPanel" class="access-panel">
-          <h3>Login</h3>
-          <form id="accessForm">
-          <label>Username or email<input id="username" type="text" inputmode="email" required autocomplete="username" placeholder="Enter your username or email"></label>
-          <label>Password<input id="password" type="password" required autocomplete="current-password"></label>
-          <button class="primary" type="submit">Continue to home</button>
-          </form>
-        </div>
-        <div id="registerPanel" class="access-panel" hidden>
-          <h3>Register</h3>
-          <form id="registerForm">
-            <label>Full name<input name="name" required></label>
-            <label>Email<input name="email" type="email" required></label>
-            <label>Username<input name="username" required></label>
-            <label>Password<input name="password" type="password" minlength="6" required></label>
-            <button class="primary" type="submit">Create member account</button>
-          </form>
-        </div>
-        <div id="demoPanel" class="access-panel" hidden>
-          <h3>View demo</h3>
-          <div class="demo-note"><strong>Demo user access</strong><br>Username: <code>Demouser</code> or email: <code>demouser@needforge.com</code> · Password: <code>123456</code></div>
-          <button class="primary" id="demoButton" type="button">Enter demo site</button>
-        </div>
-        <div id="adminPanel" class="access-panel" hidden>
-          <h3>Admin login</h3>
-          <form id="adminForm">
-            <label>Admin username<input id="adminUsername" required autocomplete="username"></label>
-            <label>Admin password<input id="adminPassword" type="password" required autocomplete="current-password"></label>
-            <button class="primary" type="submit">Continue as admin</button>
-          </form>
-          <p class="admin-note">Admin accounts cannot be registered publicly. Only the top admin can create or approve another admin account.</p>
-        </div>
-        <p id="accessMessage" class="muted" aria-live="polite"></p>
+        <form id="memberLoginForm">
+          <label>Username or email
+            <input type="text" id="memberUsername" placeholder="Enter your username or email" autocomplete="username">
+          </label>
+          <label>Password
+            <input type="password" id="memberPassword" placeholder="Enter your password" autocomplete="current-password">
+          </label>
+          <button class="primary" id="memberLoginButton" type="submit">Login</button>
+          <a href="#" class="muted" style="display:block; margin-top:.75rem;">Forgot password?</a>
+        </form>
+        <button class="primary" id="memberDemoButton" type="button" style="margin-top:.75rem;">Demo login</button>
       </div>
+
+      <div class="access-card">
+        <h2>Admin access</h2>
+        <form id="adminLoginForm">
+          <label>Username or email
+            <input type="text" id="adminUsername" placeholder="Enter your username or email" autocomplete="username">
+          </label>
+          <label>Password
+            <input type="password" id="adminPassword" placeholder="Enter your password" autocomplete="current-password">
+          </label>
+          <button class="primary" id="adminLoginButton" type="submit">Login</button>
+          <a href="#" class="muted" style="display:block; margin-top:.75rem;">Forgot password?</a>
+        </form>
+        <button class="primary" id="adminDemoButton" type="button" style="margin-top:.75rem;">Demo login</button>
+      </div>
+
+      <p id="accessMessage" class="muted" aria-live="polite"></p>
+    </section>
       <div class="access-card">
         <h2>How it works</h2>
         <p>NeedForge is a structured membership platform designed around a 10-level model. Each level gives you a clear path to grow, earn and build your network through a monthly membership fee system.</p>
@@ -111,15 +106,173 @@
         <a class="primary" href="affiliate.html">Learn how it works</a>
       </article>
     </section>
+
+    <section class="affiliate-income-table">
+      <h2>Affiliate Income</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Level</th>
+            <th>Spots</th>
+            <th>Payment/spot</th>
+            <th>Total received</th>
+            <th>Entry/cycle fee</th>
+            <th>Upgrade fee</th>
+            <th>Cycle 1 payout</th>
+            <th>Later-cycle payout</th>
+            <th>Total for 10 cycles</th>
+            <th>Cumulative total</th>
+          </tr>
+        </thead>
+        <tbody id="affiliateIncomeBody"></tbody>
+        <tfoot id="affiliateIncomeFooter"></tfoot>
+      </table>
+    </section>
   </main>
   <script>
-    const form=document.querySelector("#accessForm"), message=document.querySelector("#accessMessage");
-    function enterHome(role){sessionStorage.setItem("needforgeRole",role);window.location.href="home.html";}
-    document.querySelectorAll("[data-panel]").forEach(button=>button.addEventListener("click",()=>{document.querySelectorAll(".access-panel").forEach(panel=>panel.hidden=true);document.querySelector(`#${button.dataset.panel}`).hidden=false;message.textContent="";}));
-    form.addEventListener("submit",event=>{event.preventDefault();const identifier=document.querySelector("#username").value.trim().toLowerCase(),pass=document.querySelector("#password").value;if((identifier==="demouser"||identifier==="demouser@needforge.com")&&pass==="123456")enterHome("user");else message.textContent="Login details are not recognised. Use your username or email, or select Register to create a member account.";});
-    document.querySelector("#registerForm").addEventListener("submit",event=>{event.preventDefault();message.textContent="Registration will be connected to Supabase when the live member database is configured.";});
-    document.querySelector("#adminForm").addEventListener("submit",event=>{event.preventDefault();const user=document.querySelector("#adminUsername").value.trim(),pass=document.querySelector("#adminPassword").value;if(user==="demoadmin"&&pass==="123456")enterHome("admin");else message.textContent="Admin login details are not recognised.";});
-    document.querySelector("#demoButton").addEventListener("click",()=>enterHome("demo"));
+    const message = document.querySelector('#accessMessage');
+
+    const setSessionRole = (role) => {
+      sessionStorage.setItem('needforgeRole', role);
+    };
+
+    const validateCredentials = (role, username, password) => {
+      const expectedUser = role === 'member' ? 'Demouser' : 'demoadmin';
+      const expectedPassword = '123456';
+      return username.trim() === expectedUser && password === expectedPassword;
+    };
+
+    const showMessage = (text, isError = false) => {
+      message.textContent = text;
+      message.style.color = isError ? '#ff8a8a' : '#9db0c2';
+    };
+
+    const memberLogin = () => {
+      setSessionRole('member');
+      window.location.href = 'home.html';
+    };
+
+    const adminLogin = () => {
+      setSessionRole('admin');
+      window.location.href = 'admin-dashboard.html';
+    };
+
+    const redirectWithDelay = (callback, delay = 700) => {
+      window.setTimeout(callback, delay);
+    };
+
+    document.getElementById('memberLoginForm')?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const username = document.getElementById('memberUsername').value;
+      const password = document.getElementById('memberPassword').value;
+      if (validateCredentials('member', username, password)) {
+        showMessage('');
+        memberLogin();
+        return;
+      }
+      showMessage('Incorrect username or password.', true);
+    });
+    document.getElementById('memberDemoButton')?.addEventListener('click', () => {
+      setSessionRole('member');
+      redirectWithDelay(() => window.location.href = 'home.html');
+    });
+    document.getElementById('adminLoginForm')?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const username = document.getElementById('adminUsername').value;
+      const password = document.getElementById('adminPassword').value;
+      if (validateCredentials('admin', username, password)) {
+        showMessage('');
+        adminLogin();
+        return;
+      }
+      showMessage('Incorrect username or password.', true);
+    });
+    document.getElementById('adminDemoButton')?.addEventListener('click', () => {
+      setSessionRole('admin');
+      redirectWithDelay(() => window.location.href = 'admin-dashboard.html');
+    });
+
+    const affiliateRows = [
+      { level: 1, fee: 150, upgrade: 250 },
+      { level: 2, fee: 250, upgrade: 750 },
+      { level: 3, fee: 650, upgrade: 2500 },
+      { level: 4, fee: 2500, upgrade: 7500 },
+      { level: 5, fee: 7500, upgrade: 25000 },
+      { level: 6, fee: 25000, upgrade: 100000 },
+      { level: 7, fee: 100000, upgrade: 400000 },
+      { level: 8, fee: 400000, upgrade: 1500000 },
+      { level: 9, fee: 1500000, upgrade: 6500000 },
+      { level: 10, fee: 6500000, upgrade: null }
+    ];
+
+    const money = (value) => {
+      if (value == null || value === '') return '—';
+      return `R${Number(value).toLocaleString('en-ZA')}`;
+    };
+
+    const calculateTableData = () => affiliateRows.map((row, index) => {
+      const received = row.fee * 5;
+      const cycleOne = received - row.fee - row.fee - (row.upgrade || 0);
+      const later = received - row.fee;
+      const tenCycles = cycleOne + later * 9;
+      const previous = index ? affiliateRows.slice(0, index).reduce((sum, item) => {
+        const levelFee = Number(item.fee) || 0;
+        const levelReceived = levelFee * 5;
+        const levelUpgrade = Number(item.upgrade) || 0;
+        return sum + ((levelReceived - levelFee - levelFee - levelUpgrade) + ((levelReceived - levelFee) * 9));
+      }, 0) : 0;
+      return {
+        level: `Level ${row.level}`,
+        spots: 5,
+        fee: row.fee,
+        received,
+        cycleOne,
+        later,
+        tenCycles,
+        cumulative: previous + tenCycles,
+        upgrade: row.upgrade ? `${money(row.upgrade)} → L${row.level + 1}` : 'Final level'
+      };
+    });
+
+    const affiliateTableBody = document.querySelector('#affiliateIncomeBody');
+    const affiliateFooter = document.querySelector('#affiliateIncomeFooter');
+    if (affiliateTableBody) {
+      const rows = calculateTableData().map((row) => `
+        <tr>
+          <td>${row.level}</td>
+          <td>${row.spots}</td>
+          <td>${money(row.fee)}</td>
+          <td>${money(row.received)}</td>
+          <td>${money(row.fee)}</td>
+          <td>${row.upgrade}</td>
+          <td>${money(row.cycleOne)}</td>
+          <td>${money(row.later)}</td>
+          <td>${money(row.tenCycles)}</td>
+          <td>${money(row.cumulative)}</td>
+        </tr>
+      `).join('');
+      affiliateTableBody.innerHTML = rows;
+    }
+
+    if (affiliateFooter) {
+      const data = calculateTableData();
+      const tenCycleTotal = data.reduce((sum, item) => sum + item.tenCycles, 0);
+      const cumulativeTotal = data[data.length - 1]?.cumulative || 0;
+      affiliateFooter.innerHTML = `
+        <tr>
+          <td><strong>Total</strong></td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+          <td><strong>${money(tenCycleTotal)}</strong></td>
+          <td><strong>${money(cumulativeTotal)}</strong></td>
+        </tr>
+      `;
+    }
   </script>
 </body>
 </html>
